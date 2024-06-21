@@ -5,13 +5,54 @@
         "version": "1.0"
     },
     "paths": {
-        "/api/v1/login": {
+        "/api/user/register": {
             "post": {
                 "tags": [
-                    "Auth"
+                    "User"
+                ],
+                "summary": "Create a user in the database",
+                "operationId": "aaa4aa2bcb8eb835bae113fa4012d935",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "David"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "secretpassword"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "A trainee is uccessfully created"
+                    },
+                    "422": {
+                        "description": "Validation failure"
+                    }
+                }
+            }
+        },
+        "/api/user/login": {
+            "post": {
+                "tags": [
+                    "User Auth"
                 ],
                 "summary": "User login by email and password",
-                "operationId": "d07e6272da3474e3ebfb46ceb3e1b760",
+                "operationId": "eade6bc2477216301854cfd87b8d7488",
                 "requestBody": {
                     "required": true,
                     "content": {

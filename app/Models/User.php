@@ -37,12 +37,13 @@ class User {
     }
 
     public function createUser($data) {
-        $sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
+        $sql = "INSERT INTO users (name, email, password, role) VALUES (:name, :email, :password, :role)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => password_hash($data['password'], PASSWORD_BCRYPT),
+            'role' => $data['role'],
         ]);
     }
 

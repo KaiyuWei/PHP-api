@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Helpers\ResponseHelper;
 use App\Services\UserService;
 
-class UserController {
+class UserController extends Controller {
     private $user;
 
     private $userService;
@@ -16,37 +16,65 @@ class UserController {
         $this->user = new User();
     }
 
-    public function index() {
-        $users = $this->user->getAllUsers();
-        ResponseHelper::sendJsonResponse($users);
-    }
+    /**
+     * @OA\Post(
+     *     path="/api/user/register",
+     *     summary="Create a user in the database",
+     *     tags={"User"},
+     *     @OA\RequestBody(
+     *           required=true,
+     *           @OA\JsonContent(
+     *               @OA\Property(property="name", type="string", example="David"),
+     *               @OA\Property(property="email", type="string", example="user@example.com"),
+     *               @OA\Property(property="password", type="string", example="secretpassword"),
+     *           )
+     *       ),
+     *     @OA\Response(response="201", description="A trainee is uccessfully created"),
+     *     @OA\Response(response="422", description="Validation failure"),
+     * )
+     */
+    public function register() {
+        $data = json_decode(file_get_contents('php://input'), true);
 
-    public function show($id) {
-        $user = $this->user->getUserById($id);
-        ResponseHelper::sendJsonResponse($user);
-    }
+        if (empty($data['name']) || empty($data['email']) || empty($data['password'])) {
+            ResponseHelper::sendErrorJsonResponse('Name, email and password are required', 422);
+        }
 
-    public function store($request) {
-        $this->user->createUser($request->all());
+        $this->userService->register($data);
         ResponseHelper::sendJsonResponse(['message' => 'User created successfully'], 201);
     }
 
-    public function update($id, $request) {
-        $this->user->updateUser($id, $request->all());
-        ResponseHelper::sendJsonResponse(['message' => 'User updated successfully']);
-    }
+    /**
+     * @OA\Post(
+     *     path="/api/user/login",
+     *     summary="User login by email and password",
+     *     tags={"User Auth"},
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="email", type="string", example="user@example.com"),
+     *              @OA\Property(property="password", type="string", example="secretpassword"),
+     *          )
+     *      ),
+     *     @OA\Response(
+     *          response="200",
+     *          description="Successful login",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="token", type="string")
+     *          )
+     *      ),
+     *     @OA\Response(response="404", description="Email not found"),
+     *     @OA\Response(response="401", description="Password is wrong"),
+     *     @OA\Response(response="422", description="Validation failure"),
+     * )
+     */
+    public function login() {
+        $data = $data = json_decode(file_get_contents('php://input'), true);
 
-    public function destroy($id) {
-        $this->user->deleteUser($id);
-        ResponseHelper::sendJsonResponse(['message' => 'User deleted successfully'], 204);
-    }
-
-    public function login($request) {
-        $data = $request->all();
         if (empty($data['email']) || empty($data['password'])) {
             ResponseHelper::sendErrorJsonResponse('Email and password are required', 400);
         }
 
-        $this->userService->login($data['email'], $data['password']);
+        $this->userService->login($data);
     }
 }
