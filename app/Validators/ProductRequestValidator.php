@@ -6,7 +6,7 @@ use App\Services\ProductService;
 
 class ProductRequestValidator
 {
-    protected $productService;
+    protected ProductService $productService;
 
     public function __construct()
     {

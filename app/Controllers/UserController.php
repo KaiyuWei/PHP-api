@@ -5,12 +5,13 @@ namespace App\Controllers;
 use App\Helpers\ResponseHelper;
 use App\Services\UserService;
 use App\Validators\UserRequestValidator;
+use Dotenv\Validator;
 
 class UserController extends Controller {
 
-    protected $userService;
+    protected UserService $userService;
 
-    protected $validator;
+    protected UserRequestValidator $validator;
 
     public function __construct() {
         parent::__construct();
@@ -35,12 +36,13 @@ class UserController extends Controller {
      *     @OA\Response(response="422", description="Validation failure"),
      * )
      */
-    public function register() {
+    public function register(): void
+    {
         $data = json_decode(file_get_contents('php://input'), true);
         $this->validate('validateForRegisterRequest', $data);
 
-        $this->userService->register($data);
-        ResponseHelper::sendJsonResponse(['message' => 'User created successfully'], 201);
+        $result = $this->userService->register($data);
+        if($result) ResponseHelper::sendJsonResponse(['message' => 'User created successfully'], 201);
     }
 
     /**
@@ -66,7 +68,8 @@ class UserController extends Controller {
      *     @OA\Response(response="422", description="Validation failure"),
      * )
      */
-    public function login() {
+    public function login(): void
+    {
         $data = json_decode(file_get_contents('php://input'), true);
         $this->validate('validateForLoginRequest', $data);
 

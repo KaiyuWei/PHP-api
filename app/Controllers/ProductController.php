@@ -8,9 +8,9 @@ use App\Validators\ProductRequestValidator;
 
 class ProductController extends Controller
 {
-    protected $productService;
+    protected ProductService $productService;
 
-    protected $validator;
+    protected ProductRequestValidator $validator;
 
     public function __construct() {
         parent::__construct();
@@ -40,7 +40,8 @@ class ProductController extends Controller
      *       )
      * )
      */
-    public function index() {
+    public function index(): void
+    {
         $data = $this->productService->getAll();
         ResponseHelper::sendJsonResponse(['data' => $data]);
     }

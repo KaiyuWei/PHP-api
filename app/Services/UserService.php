@@ -6,42 +6,44 @@ use App\Models\User;
 use App\Helpers\ResponseHelper;
 
 class UserService extends Service {
-    protected $userModel;
+    protected User $userModel;
 
     public function __construct() {
         $this->userModel = new User();
     }
 
-    public function login($data) {
+    public function login(array $data): string
+    {
         list('email' => $email, 'password' => $password) = $data;
         $user = $this->userModel->getByEmail($email, ['id', 'password']);
 
-        $this->isUserExisting($user);
+        $this->checkUserExistence($user);
         $this->checkPassword($password, $user['password']);
 
         return $this->generateAndUpdateTokenForUser($user['id']);
     }
 
-    public function register($data)
+    public function register(array $data): bool
     {
         // only the role 'trainee' can be registered from the api.
         $data['role'] = 'trainee';
-        $this->userModel->create($data);
+        return $this->userModel->create($data);
     }
 
-    public function isEmailRegistered($email)
+    public function isEmailRegistered(string $email): bool
     {
         $result = $this->userModel->getByEmail($email, ['id']);
         return !empty($result);
     }
 
-    private function isUserExisting($user) {
+    private function checkUserExistence($user):void
+    {
         if (!$user) {
             ResponseHelper::sendErrorJsonResponse('Email does not exist', 401);
         }
     }
 
-    private function checkPassword($inputPassword, $realPasswordHash)
+    private function checkPassword(string $inputPassword, string $realPasswordHash): void
     {
         $isPasswordCorrect = password_verify($inputPassword, $realPasswordHash);
         if (!$isPasswordCorrect) {
@@ -49,7 +51,8 @@ class UserService extends Service {
         }
     }
 
-    private function generateAndUpdateTokenForUser($userId) {
+    private function generateAndUpdateTokenForUser(int $userId): string
+    {
         $token = bin2hex(openssl_random_pseudo_bytes(32));
         $this->userModel->updateToken($userId, $token);
 

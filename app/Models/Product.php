@@ -13,22 +13,26 @@ class Product extends Model
         $this->db = (new Database())->getConnection();
     }
 
-    public function getAll($queryFields = []) {
+    public function getAll(array $queryFields = []): array
+    {
         $queryFields = $this->convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM products";
         $stmt = $this->db->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result ?? [];
     }
 
-    public function getById($id) {
+    public function getById(int $id): array
+    {
         $sql = "SELECT * FROM products WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function create($data) {
+    public function create(array $data): bool
+    {
         $sql = "INSERT INTO products (name, description, price) VALUES (:name, :description, :price)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
@@ -38,8 +42,8 @@ class Product extends Model
         ]);
     }
 
-    // Update a product by ID
-    public function update($id, $data) {
+    public function update(int $id, array $data): bool
+    {
         $sql = "UPDATE products SET name = :name, description = :description, price = :price WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
@@ -51,7 +55,8 @@ class Product extends Model
     }
 
     // Delete a product by ID
-    public function delete($id) {
+    public function delete(int $id): bool
+    {
         $sql = "DELETE FROM products WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute(['id' => $id]);

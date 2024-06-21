@@ -6,14 +6,14 @@ use App\Services\UserService;
 
 class UserRequestValidator
 {
-    protected $userService;
+    protected UserService $userService;
 
     public function __construct()
     {
         $this->userService = new UserService();
     }
 
-    public function validateForRegisterRequest($data)
+    public function validateForRegisterRequest(array $data): void
     {
         $isRequiredDataMissing = empty($data['name']) || empty($data['email']) || empty($data['password']);
         if($isRequiredDataMissing) {
@@ -26,7 +26,7 @@ class UserRequestValidator
         }
     }
 
-    public function validateForLoginRequest($data)
+    public function validateForLoginRequest(array $data): void
     {
         $isRequiredDataMissing = empty($data['email']) || empty($data['password']);
         if($isRequiredDataMissing) {
