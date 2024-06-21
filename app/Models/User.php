@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Database;
+use PDO;
 
-class User {
+class User extends Model
+{
     private $db;
 
     public function __construct() {
@@ -23,8 +25,10 @@ class User {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getUserByEmail($email) {
-        $sql = "SELECT * FROM users WHERE email = :email";
+    public function getUserByEmail($email, $queryFields = []) {
+        $queryFields = $this->convertQueryFieldsToString($queryFields);
+
+        $sql = "SELECT " . $queryFields . " FROM users WHERE email = :email";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['email' => $email]);
         return $stmt->fetch(\PDO::FETCH_ASSOC);

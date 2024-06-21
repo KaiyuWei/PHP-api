@@ -15,7 +15,7 @@ class UserService {
     public function login($data) {
         list('email' => $email, 'password' => $password) = $data;
 
-        $user = $this->userModel->getUserByEmail($email);
+        $user = $this->userModel->getUserByEmail($email, ['id', 'password']);
 
         if (!$user || !password_verify($password, $user['password'])) {
             ResponseHelper::sendErrorJsonResponse('Invalid email or password', 401);
@@ -32,5 +32,11 @@ class UserService {
         // only the role 'trainee' can be registered from the api.
         $data['role'] = 'trainee';
         $this->userModel->createUser($data);
+    }
+
+    public function isEmailRegistered($email)
+    {
+        $result = $this->userModel->getUserByEmail($email, ['id']);
+        return !empty($result);
     }
 }

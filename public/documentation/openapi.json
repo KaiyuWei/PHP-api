@@ -8,7 +8,7 @@
         "/api/user/register": {
             "post": {
                 "tags": [
-                    "User"
+                    "User Auth"
                 ],
                 "summary": "Create a user in the database",
                 "operationId": "aaa4aa2bcb8eb835bae113fa4012d935",
@@ -37,8 +37,8 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "A trainee is uccessfully created"
+                    "201": {
+                        "description": "A user is uccessfully created"
                     },
                     "422": {
                         "description": "Validation failure"

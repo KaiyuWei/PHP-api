@@ -5,22 +5,25 @@ namespace App\Controllers;
 use App\Models\User;
 use App\Helpers\ResponseHelper;
 use App\Services\UserService;
+use App\Validators\UserValidator;
 
 class UserController extends Controller {
-    private $user;
 
-    private $userService;
+    protected $userService;
+
+    protected $validator;
 
     public function __construct() {
+        parent::__construct();
         $this->userService = new UserService();
-        $this->user = new User();
+        $this->validator = new UserValidator();
     }
 
     /**
      * @OA\Post(
      *     path="/api/user/register",
      *     summary="Create a user in the database",
-     *     tags={"User"},
+     *     tags={"User Auth"},
      *     @OA\RequestBody(
      *           required=true,
      *           @OA\JsonContent(
@@ -29,16 +32,13 @@ class UserController extends Controller {
      *               @OA\Property(property="password", type="string", example="secretpassword"),
      *           )
      *       ),
-     *     @OA\Response(response="201", description="A trainee is uccessfully created"),
+     *     @OA\Response(response="201", description="A user is uccessfully created"),
      *     @OA\Response(response="422", description="Validation failure"),
      * )
      */
     public function register() {
         $data = json_decode(file_get_contents('php://input'), true);
-
-        if (empty($data['name']) || empty($data['email']) || empty($data['password'])) {
-            ResponseHelper::sendErrorJsonResponse('Name, email and password are required', 422);
-        }
+        $this->validate('validateForRegisterRequest', $data);
 
         $this->userService->register($data);
         ResponseHelper::sendJsonResponse(['message' => 'User created successfully'], 201);
@@ -69,10 +69,10 @@ class UserController extends Controller {
      * )
      */
     public function login() {
-        $data = $data = json_decode(file_get_contents('php://input'), true);
+        $data = json_decode(file_get_contents('php://input'), true);
 
         if (empty($data['email']) || empty($data['password'])) {
-            ResponseHelper::sendErrorJsonResponse('Email and password are required', 400);
+            ResponseHelper::sendErrorJsonResponse('Email and password are required', 422);
         }
 
         $this->userService->login($data);
