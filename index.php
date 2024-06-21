@@ -9,6 +9,8 @@ use App\Routes\ApiRoutes;
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
+echo "Welcome";
+
 // Set up and dispatch routes
 $routes = new ApiRoutes();
 $routes->setup();
