@@ -14,16 +14,12 @@ class UserService {
 
     public function login($data) {
         list('email' => $email, 'password' => $password) = $data;
-
         $user = $this->userModel->getUserByEmail($email, ['id', 'password']);
 
-        if (!$user || !password_verify($password, $user['password'])) {
-            ResponseHelper::sendErrorJsonResponse('Invalid email or password', 401);
-        }
+        $this->isUserExisting($user);
+        $this->checkPassword($password, $user['password']);
 
-        $token = bin2hex(openssl_random_pseudo_bytes(32));
-        $this->userModel->updateToken($user['id'], $token);
-
+        $token = $this->generateAndUpdateTokenForUser($user['id']);
         ResponseHelper::sendJsonResponse(['token' => $token]);
     }
 
@@ -38,5 +34,26 @@ class UserService {
     {
         $result = $this->userModel->getUserByEmail($email, ['id']);
         return !empty($result);
+    }
+
+    private function isUserExisting($user) {
+        if (!$user) {
+            ResponseHelper::sendErrorJsonResponse('Email does not exist', 401);
+        }
+    }
+
+    private function checkPassword($inputPassword, $realPasswordHash)
+    {
+        $isPasswordCorrect = password_verify($inputPassword, $realPasswordHash);
+        if (!$isPasswordCorrect) {
+            ResponseHelper::sendErrorJsonResponse('Invalid password', 401);
+        }
+    }
+
+    private function generateAndUpdateTokenForUser($userId) {
+        $token = bin2hex(openssl_random_pseudo_bytes(32));
+        $this->userModel->updateToken($userId, $token);
+
+        return $token;
     }
 }
