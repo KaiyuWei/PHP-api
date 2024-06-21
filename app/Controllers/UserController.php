@@ -47,6 +47,6 @@ class UserController {
             ResponseHelper::sendErrorJsonResponse('Email and password are required', 400);
         }
 
-        return $this->userService->login($data['email'], $data['password']);
+        $this->userService->login($data['email'], $data['password']);
     }
 }

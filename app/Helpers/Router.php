@@ -33,7 +33,6 @@ class Router {
 
         foreach ($this->routes as $route) {
             $this->triggerControllerMethod($route);
-            return;
         }
 
         http_response_code(404);
@@ -44,7 +43,7 @@ class Router {
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-        if ($route['method'] == $requestMethod && $route['uri'] == $requestUri) {
+        if ($route['method'] === $requestMethod && $route['uri'] === $requestUri) {
             list($controller, $method) = $route['action'];
             (new $controller)->$method();
         }
