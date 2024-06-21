@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Helpers\ResponseHelper;
 
-class UserService {
+class UserService extends Service {
     private $userModel;
 
     public function __construct() {
@@ -14,7 +14,7 @@ class UserService {
 
     public function login($data) {
         list('email' => $email, 'password' => $password) = $data;
-        $user = $this->userModel->getUserByEmail($email, ['id', 'password']);
+        $user = $this->userModel->getByEmail($email, ['id', 'password']);
 
         $this->isUserExisting($user);
         $this->checkPassword($password, $user['password']);
@@ -27,12 +27,12 @@ class UserService {
     {
         // only the role 'trainee' can be registered from the api.
         $data['role'] = 'trainee';
-        $this->userModel->createUser($data);
+        $this->userModel->create($data);
     }
 
     public function isEmailRegistered($email)
     {
-        $result = $this->userModel->getUserByEmail($email, ['id']);
+        $result = $this->userModel->getByEmail($email, ['id']);
         return !empty($result);
     }
 

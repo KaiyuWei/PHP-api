@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\User;
 use App\Helpers\ResponseHelper;
 use App\Services\UserService;
 use App\Validators\UserValidator;
