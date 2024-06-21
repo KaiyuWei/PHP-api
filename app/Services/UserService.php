@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Helpers\ResponseHelper;
 
 class UserService extends Service {
-    private $userModel;
+    protected $userModel;
 
     public function __construct() {
         $this->userModel = new User();
@@ -19,8 +19,7 @@ class UserService extends Service {
         $this->isUserExisting($user);
         $this->checkPassword($password, $user['password']);
 
-        $token = $this->generateAndUpdateTokenForUser($user['id']);
-        ResponseHelper::sendJsonResponse(['token' => $token]);
+        return $this->generateAndUpdateTokenForUser($user['id']);
     }
 
     public function register($data)

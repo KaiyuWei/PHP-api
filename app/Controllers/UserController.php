@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Helpers\ResponseHelper;
 use App\Services\UserService;
-use App\Validators\UserValidator;
+use App\Validators\UserRequestValidator;
 
 class UserController extends Controller {
 
@@ -15,7 +15,7 @@ class UserController extends Controller {
     public function __construct() {
         parent::__construct();
         $this->userService = new UserService();
-        $this->validator = new UserValidator();
+        $this->validator = new UserRequestValidator();
     }
 
     /**
@@ -70,6 +70,7 @@ class UserController extends Controller {
         $data = json_decode(file_get_contents('php://input'), true);
         $this->validate('validateForLoginRequest', $data);
 
-        $this->userService->login($data);
+        $token = $this->userService->login($data);
+        ResponseHelper::sendJsonResponse(['token' => $token]);
     }
 }

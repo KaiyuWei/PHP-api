@@ -13,8 +13,10 @@ class Product extends Model
         $this->db = (new Database())->getConnection();
     }
 
-    public function getAll() {
-        $sql = "SELECT * FROM products";
+    public function getAll($queryFields = []) {
+        $queryFields = $this->convertQueryFieldsToString($queryFields);
+
+        $sql = "SELECT " . $queryFields . " FROM products";
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

@@ -2,12 +2,11 @@
 
 namespace App\Validators;
 
-use App\Helpers\ResponseHelper;
 use App\Services\UserService;
 
-class UserValidator
+class UserRequestValidator
 {
-    private $userService;
+    protected $userService;
 
     public function __construct()
     {

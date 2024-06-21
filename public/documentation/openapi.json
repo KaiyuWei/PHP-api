@@ -5,6 +5,43 @@
         "version": "1.0"
     },
     "paths": {
+        "/api/product/index": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "List all products",
+                "operationId": "064101e99f016542a0667ba29db1c44c",
+                "responses": {
+                    "200": {
+                        "description": "Successful query",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/register": {
             "post": {
                 "tags": [

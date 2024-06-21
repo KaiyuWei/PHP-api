@@ -11,6 +11,7 @@ abstract class Controller
 {
     public function __construct()
     {
+        //
     }
 
     protected function validate($validator, $data)
