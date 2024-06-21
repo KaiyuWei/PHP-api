@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'host' => getenv('DB_HOST'),
-    'port' => getenv('DB_PORT'),
-    'dbname' => getenv('DB_DATABASE'),
-    'username' => getenv('DB_USERNAME'),
-    'password' => getenv('DB_PASSWORD'),
+    'host' => $_ENV['DB_HOST'],
+    'port' => $_ENV['DB_PORT'],
+    'dbname' => $_ENV['DB_DATABASE'],
+    'username' => $_ENV['DB_USERNAME'],
+    'password' => $_ENV['DB_PASSWORD'],
 ];
