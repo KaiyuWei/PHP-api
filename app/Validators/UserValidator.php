@@ -26,4 +26,12 @@ class UserValidator
             throw new \Exception('This email is already registered', 422);
         }
     }
+
+    public function validateForLoginRequest($data)
+    {
+        $isRequiredDataMissing = empty($data['email']) || empty($data['password']);
+        if($isRequiredDataMissing) {
+            throw new \Exception('Email and password are required', 422);
+        }
+    }
 }

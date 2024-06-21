@@ -89,11 +89,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Email not found"
-                    },
                     "401": {
-                        "description": "Password is wrong"
+                        "description": "Invalid email or password"
                     },
                     "422": {
                         "description": "Validation failure"

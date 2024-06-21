@@ -1,3 +1,4 @@
 todo
 - create validator.
 - remove /api/test routing from ApiRoutes
+- add $queryFields for all (select) query functions

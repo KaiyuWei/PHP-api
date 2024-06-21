@@ -63,17 +63,13 @@ class UserController extends Controller {
      *              @OA\Property(property="token", type="string")
      *          )
      *      ),
-     *     @OA\Response(response="404", description="Email not found"),
-     *     @OA\Response(response="401", description="Password is wrong"),
+     *     @OA\Response(response="401", description="Invalid email or password"),
      *     @OA\Response(response="422", description="Validation failure"),
      * )
      */
     public function login() {
         $data = json_decode(file_get_contents('php://input'), true);
-
-        if (empty($data['email']) || empty($data['password'])) {
-            ResponseHelper::sendErrorJsonResponse('Email and password are required', 422);
-        }
+        $this->validate('validateForLoginRequest', $data);
 
         $this->userService->login($data);
     }
