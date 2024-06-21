@@ -1,4 +1,5 @@
 <?php
+
 require '../vendor/autoload.php';
 
 use Dotenv\Dotenv;
@@ -8,6 +9,6 @@ use App\Routes\ApiRoutes;
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-// Set up routes
+// Set up and dispatch routes
 $routes = new ApiRoutes();
 $routes->setup();
