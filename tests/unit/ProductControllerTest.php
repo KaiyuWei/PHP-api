@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Unit;
+
 use App\Controllers\ProductController;
 use PHPUnit\Framework\TestCase;
 use App\Services\ProductService;
