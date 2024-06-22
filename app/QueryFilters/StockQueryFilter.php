@@ -13,11 +13,11 @@ class StockQueryFilter extends QueryFilter
 
     public function createWhereClause(array $filters): string
     {
-        $whereClauseComponents = $this->s($filters);
+        $whereClauseComponents = $this->createWhereClauseComponents($filters);
         return $this->createWhereClauseFromComponents($whereClauseComponents);
     }
 
-    private function s(array $filters): array
+    private function createWhereClauseComponents(array $filters): array
     {
         $whereClauseComponents = [];
         foreach($this->filterableColumns as $column)
