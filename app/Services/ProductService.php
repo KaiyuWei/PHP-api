@@ -6,15 +6,15 @@ use App\Models\Product;
 
 class ProductService extends Service
 {
-    protected Product $productModel;
+    protected Product $model;
 
     public function __construct() {
-        $this->productModel = new Product();
+        $this->model = new Product();
     }
 
     public function getAll(): array
     {
-        if (!$this->productModel->getAll(['id', 'name'])) return [];
-        return $this->productModel->getAll(['id', 'name']);
+        if (!$this->model->getAll(['id', 'name'])) return [];
+        return $this->model->getAll(['id', 'name']);
     }
 }

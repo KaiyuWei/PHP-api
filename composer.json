@@ -14,5 +14,10 @@
   "require-dev": {
     "phpunit/phpunit": "^11.2",
     "fakerphp/faker": "^1.23"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit --testdox",
+    "start:dev": "php -S localhost:8000",
+    "gen:doc": "php generate_docs.php"
   }
 }

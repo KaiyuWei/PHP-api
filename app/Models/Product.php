@@ -7,8 +7,6 @@ use PDO;
 
 class Product extends Model
 {
-    protected $db;
-
     public function __construct() {
         $this->db = (new Database())->getConnection();
     }
@@ -54,7 +52,6 @@ class Product extends Model
         ]);
     }
 
-    // Delete a product by ID
     public function delete(int $id): bool
     {
         $sql = "DELETE FROM products WHERE id = :id";

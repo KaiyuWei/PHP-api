@@ -7,8 +7,6 @@ use PDO;
 
 class User extends Model
 {
-    protected PDO $db;
-
     public function __construct() {
         $this->db = (new Database())->getConnection();
     }

@@ -4,12 +4,10 @@ namespace App\Validators;
 
 use App\Services\ProductService;
 
-class ProductRequestValidator
+class ProductRequestValidator extends Validator
 {
-    protected ProductService $productService;
-
     public function __construct()
     {
-        $this->productService = new ProductService();
+        $this->service = new ProductService();
     }
 }

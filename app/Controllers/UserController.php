@@ -9,13 +9,9 @@ use Dotenv\Validator;
 
 class UserController extends Controller {
 
-    protected UserService $userService;
-
-    protected UserRequestValidator $validator;
-
     public function __construct() {
         parent::__construct();
-        $this->userService = new UserService();
+        $this->service = new UserService();
         $this->validator = new UserRequestValidator();
     }
 
@@ -41,7 +37,7 @@ class UserController extends Controller {
         $data = json_decode(file_get_contents('php://input'), true);
         $this->validate('validateForRegisterRequest', $data);
 
-        $result = $this->userService->register($data);
+        $result = $this->service->register($data);
         if($result) ResponseHelper::sendJsonResponse(['message' => 'User created successfully'], 201);
     }
 
@@ -73,7 +69,7 @@ class UserController extends Controller {
         $data = json_decode(file_get_contents('php://input'), true);
         $this->validate('validateForLoginRequest', $data);
 
-        $token = $this->userService->login($data);
+        $token = $this->service->login($data);
         ResponseHelper::sendJsonResponse(['token' => $token]);
     }
 }

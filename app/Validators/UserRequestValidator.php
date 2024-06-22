@@ -4,13 +4,11 @@ namespace App\Validators;
 
 use App\Services\UserService;
 
-class UserRequestValidator
+class UserRequestValidator extends Validator
 {
-    protected UserService $userService;
-
     public function __construct()
     {
-        $this->userService = new UserService();
+        $this->service = new UserService();
     }
 
     public function validateForRegisterRequest(array $data): void
@@ -20,7 +18,7 @@ class UserRequestValidator
             throw new \Exception('Name, email and password are required', 422);
         }
 
-        $isEmailRegistered = $this->userService->isEmailRegistered($data['email']);
+        $isEmailRegistered = $this->service->isEmailRegistered($data['email']);
         if($isEmailRegistered) {
             throw new \Exception('This email is already registered', 422);
         }

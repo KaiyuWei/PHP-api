@@ -3,12 +3,18 @@
 namespace App\Controllers;
 
 use App\Helpers\ResponseHelper;
+use App\Services\Service;
+use App\Validators\Validator;
 
 /**
  * @OA\Info(title="Roamler API", version="1.0")
  */
 abstract class Controller
 {
+    protected Service $service;
+
+    protected Validator $validator;
+
     public function __construct()
     {
         //
