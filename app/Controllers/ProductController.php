@@ -63,7 +63,7 @@ class ProductController extends Controller
      *            ),
      *        ),
      *     @OA\Response(response="201", description="A product is added"),
-     *     @OA\Response(response="400", description="Input data is invalide"),
+     *     @OA\Response(response="400", description="Input data is invalid"),
      *     @OA\Response(response="401", description="Authentication failure"),
      *     @OA\Response(response="422", description="Input data is unprocessable"),
      * )
@@ -93,7 +93,7 @@ class ProductController extends Controller
      *            ),
      *        ),
      *     @OA\Response(response="200", description="Product is updated"),
-     *     @OA\Response(response="400", description="Input data is invalide"),
+     *     @OA\Response(response="400", description="Input data is invalid"),
      *     @OA\Response(response="401", description="Authentication failure"),
      *     @OA\Response(response="404", description="Product not found"),
      *     @OA\Response(response="422", description="Input data is unprocessable"),
@@ -121,7 +121,7 @@ class ProductController extends Controller
      *         description="The ID of a product",
      *      ),
      *     @OA\Response(response="204", description="Product is deleted"),
-     *     @OA\Response(response="400", description="Input data is invalide"),
+     *     @OA\Response(response="400", description="Input data is invalid"),
      *     @OA\Response(response="401", description="Authentication failure"),
      *     @OA\Response(response="404", description="Product not found"),
      * )
@@ -130,19 +130,10 @@ class ProductController extends Controller
     {
         $this->authenticateAdminUser();
 
-        $id = $this->getProductIdOrReturnNotFound();
+        $id = $this->getIdInUriOrReturnNotFound();
         $this->validate('validateForDeletingProduct', $id);
 
         $result = $this->service->deleteProduct($id);
         if($result) ResponseHelper::sendSuccessJsonResponse('Product deleted', 204);
-    }
-
-    private function getProductIdOrReturnNotFound()
-    {
-        $id = DynamicRouteParser::parseAndGetDigitsAtTheEndOfUri($_SERVER['REQUEST_URI']);
-        if($id) return $id;
-
-        ResponseHelper::sendErrorJsonResponse('User Id is required in the path');
-        exit();
     }
 }

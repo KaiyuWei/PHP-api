@@ -29,7 +29,7 @@ class UserController extends Controller {
      *           )
      *       ),
      *     @OA\Response(response="201", description="A user is uccessfully registered"),
-     *     @OA\Response(response="400", description="Input data is invalide"),
+     *     @OA\Response(response="400", description="Input data is invalid"),
      *     @OA\Response(response="422", description="Input data is unprocessable"),
      * )
      */
@@ -62,7 +62,7 @@ class UserController extends Controller {
      *          )
      *      ),
      *     @OA\Response(response="401", description="Invalid email or password"),
-     *     @OA\Response(response="400", description="Input data is invalide"),
+     *     @OA\Response(response="400", description="Input data is invalid"),
      *     @OA\Response(response="422", description="Input data is unprocessable"),
      * )
      */

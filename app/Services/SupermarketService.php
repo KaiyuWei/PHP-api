@@ -32,4 +32,9 @@ class SupermarketService extends Service
     {
         return $this->model->update($data);
     }
+
+    public function deleteSupermarket(int $id): bool
+    {
+        return $this->model->delete($id);
+    }
 }

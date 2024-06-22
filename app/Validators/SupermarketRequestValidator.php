@@ -40,10 +40,15 @@ class SupermarketRequestValidator extends Validator
             throw new \Exception('Supermarket name is too long', 422);
         }
 
-        $this->validateProductExistenceAndThrowIfNotExisting($data['id']);
+        $this->validateSupermarketExistenceAndThrowIfNotExisting($data['id']);
     }
 
-    private function validateProductExistenceAndThrowIfNotExisting(int $id): void
+    public function validateForDeletingSupermarket(int $id): void
+    {
+        $this->validateSupermarketExistenceAndThrowIfNotExisting($id);
+    }
+
+    private function validateSupermarketExistenceAndThrowIfNotExisting(int $id): void
     {
         $isProductFound = $this->service->isSupermarketExisting($id);
         if(!$isProductFound) {

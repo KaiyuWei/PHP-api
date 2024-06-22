@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Helpers\Authenticator;
+use App\Helpers\DynamicRouteParser;
 use App\Helpers\ResponseHelper;
 use App\Services\Service;
 use App\Validators\Validator;
@@ -63,5 +64,14 @@ abstract class Controller
             ResponseHelper::sendErrorJsonResponse('You are not authorized', 401);
             exit();
         }
+    }
+
+    protected function getIdInUriOrReturnNotFound()
+    {
+        $id = DynamicRouteParser::parseAndGetDigitsAtTheEndOfUri($_SERVER['REQUEST_URI']);
+        if($id) return $id;
+
+        ResponseHelper::sendErrorJsonResponse('Id is required in the path');
+        exit();
     }
 }

@@ -82,7 +82,7 @@
                         "description": "Product is updated"
                     },
                     "400": {
-                        "description": "Input data is invalide"
+                        "description": "Input data is invalid"
                     },
                     "401": {
                         "description": "Authentication failure"
@@ -127,7 +127,7 @@
                         "description": "A product is added"
                     },
                     "400": {
-                        "description": "Input data is invalide"
+                        "description": "Input data is invalid"
                     },
                     "401": {
                         "description": "Authentication failure"
@@ -166,7 +166,7 @@
                         "description": "Product is deleted"
                     },
                     "400": {
-                        "description": "Input data is invalide"
+                        "description": "Input data is invalid"
                     },
                     "401": {
                         "description": "Authentication failure"
@@ -259,7 +259,7 @@
                         "description": "Supermarket is updated"
                     },
                     "400": {
-                        "description": "Input data is invalide"
+                        "description": "Input data is invalid"
                     },
                     "401": {
                         "description": "Authentication failure"
@@ -307,10 +307,49 @@
                         "description": "Authentication failure"
                     },
                     "400": {
-                        "description": "Input data is invalide"
+                        "description": "Input data is invalid"
                     },
                     "422": {
                         "description": "Input data is unprocessable"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/supermarket/{id}": {
+            "delete": {
+                "tags": [
+                    "Supermarket"
+                ],
+                "summary": "Delete a supermarket",
+                "operationId": "f3f5340886da7eb94868e9849023e3ea",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of a supermarket",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Supermarket is deleted"
+                    },
+                    "400": {
+                        "description": "Input data is invalid"
+                    },
+                    "401": {
+                        "description": "Authentication failure"
+                    },
+                    "404": {
+                        "description": "Product not found"
                     }
                 },
                 "security": [
@@ -356,7 +395,7 @@
                         "description": "A user is uccessfully registered"
                     },
                     "400": {
-                        "description": "Input data is invalide"
+                        "description": "Input data is invalid"
                     },
                     "422": {
                         "description": "Input data is unprocessable"
@@ -411,7 +450,7 @@
                         "description": "Invalid email or password"
                     },
                     "400": {
-                        "description": "Input data is invalide"
+                        "description": "Input data is invalid"
                     },
                     "422": {
                         "description": "Input data is unprocessable"
