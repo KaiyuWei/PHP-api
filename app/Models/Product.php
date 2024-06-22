@@ -31,24 +31,20 @@ class Product extends Model
 
     public function create(array $data): bool
     {
-        $sql = "INSERT INTO products (name, description, price) VALUES (:name, :description, :price)";
+        $sql = "INSERT INTO products (name) VALUES (:name)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
-            'name' => $data['name'],
-            'description' => $data['description'],
-            'price' => $data['price']
+            'name' => $data['name']
         ]);
     }
 
     public function update(int $id, array $data): bool
     {
-        $sql = "UPDATE products SET name = :name, description = :description, price = :price WHERE id = :id";
+        $sql = "UPDATE products SET name = :name WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             'id' => $id,
-            'name' => $data['name'],
-            'description' => $data['description'],
-            'price' => $data['price']
+            'name' => $data['name']
         ]);
     }
 

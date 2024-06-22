@@ -50,6 +50,47 @@
                 ]
             }
         },
+        "/api/product": {
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "add a product in database",
+                "operationId": "e397660ec66e31cdfa34501a6ceb6beb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "IPhone 100"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "A product is uccessfully added"
+                    },
+                    "401": {
+                        "description": "Authentication failure"
+                    },
+                    "422": {
+                        "description": "Validation failure"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/user/register": {
             "post": {
                 "tags": [
@@ -83,7 +124,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "A user is uccessfully created"
+                        "description": "A user is uccessfully registered"
                     },
                     "422": {
                         "description": "Validation failure"

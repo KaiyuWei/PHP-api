@@ -31,7 +31,7 @@ abstract class Controller
         //
     }
 
-    protected function validate($validator, $data)
+    protected function validate($validator, $data): void
     {
         try{
             $this->validator->$validator($data);
@@ -41,10 +41,23 @@ abstract class Controller
         }
     }
 
+    protected function getDataFromRequest(): array
+    {
+        return json_decode(file_get_contents('php://input'), true);
+    }
+
     protected function authenticateCurrentUser(): void
     {
         if (!Authenticator::isAuthenticated()) {
             ResponseHelper::sendErrorJsonResponse('No access to resource', 401);
+            exit();
+        }
+    }
+
+    protected function authenticateAdminUser(): void
+    {
+        if(!Authenticator::hasAdminRole()){
+            ResponseHelper::sendErrorJsonResponse('You are not authorized', 401);
             exit();
         }
     }

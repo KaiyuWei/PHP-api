@@ -10,9 +10,14 @@ class ProductService extends Service
         $this->model = new Product();
     }
 
-    public function getAll(): array
+    public function getProductsWithIdAndNameFields(): array
     {
         if (!$this->model->getAll(['id', 'name'])) return [];
         return $this->model->getAll(['id', 'name']);
+    }
+
+    public function createProduct(array $data): bool
+    {
+        return $this->model->create($data);
     }
 }

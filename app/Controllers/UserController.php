@@ -28,13 +28,13 @@ class UserController extends Controller {
      *               @OA\Property(property="password", type="string", example="secretpassword"),
      *           )
      *       ),
-     *     @OA\Response(response="201", description="A user is uccessfully created"),
+     *     @OA\Response(response="201", description="A user is uccessfully registered"),
      *     @OA\Response(response="422", description="Validation failure"),
      * )
      */
     public function register(): void
     {
-        $data = json_decode(file_get_contents('php://input'), true);
+        $data = $this->getDataFromRequest();
         $this->validate('validateForRegisterRequest', $data);
 
         $result = $this->service->register($data);
@@ -66,7 +66,7 @@ class UserController extends Controller {
      */
     public function login(): void
     {
-        $data = json_decode(file_get_contents('php://input'), true);
+        $data = $this->getDataFromRequest();
         $this->validate('validateForLoginRequest', $data);
 
         $token = $this->service->login($data);
