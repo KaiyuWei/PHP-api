@@ -18,25 +18,24 @@ class ProductControllerTest extends TestCase
 
     public function test_index()
     {
-//        $mockData = [
-//            ['id' => 1, 'name' => 'Product 1'],
-//            ['id' => 2, 'name' => 'Product 2'],
-//        ];
-//
-//        $temp = [];
-//
-//        $this->productService
-//            ->expects($this->once())
-//            ->method('getAll')
-//            ->willReturn($mockData);
-//
-//        ob_start();
-//        $this->controller->index();
-//        $output = ob_get_clean();
-//
-//        $expectedOutput = json_encode(['data' => $mockData]);
-//        $this->assertEquals($expectedOutput, $output);
-        $this->assertEquals(2, 2);
+        $mockData = [
+            ['id' => 1, 'name' => 'Product 1'],
+            ['id' => 2, 'name' => 'Product 2'],
+        ];
+
+        $temp = [];
+
+        $this->productService
+            ->expects($this->once())
+            ->method('getAll')
+            ->willReturn($mockData);
+
+        ob_start();
+        $this->controller->index();
+        $output = ob_get_clean();
+
+        $expectedOutput = json_encode(['data' => $mockData]);
+        $this->assertEquals($expectedOutput, $output);
     }
 
     private function createMockAndReflection(): void

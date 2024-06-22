@@ -53,6 +53,7 @@ class Router {
         if ($route['method'] === $requestMethod && $route['uri'] === $requestUri) {
             list($controller, $method) = $route['action'];
             (new $controller)->$method();
+            exit();
         }
     }
 

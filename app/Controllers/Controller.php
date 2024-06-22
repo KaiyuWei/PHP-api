@@ -26,6 +26,7 @@ abstract class Controller
             $this->validator->$validator($data);
         } catch (\Exception $e) {
             ResponseHelper::sendErrorJsonResponse($e->getMessage(), $e->getCode());
+            exit();
         }
     }
 }

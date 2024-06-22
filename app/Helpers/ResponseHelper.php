@@ -8,7 +8,6 @@ class ResponseHelper {
         header('Content-Type: application/json');
         http_response_code($status);
         echo json_encode($data);
-        exit();
     }
 
     public static function sendSuccessJsonResponse(string $message, int $status = 200): void

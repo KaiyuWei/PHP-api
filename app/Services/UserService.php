@@ -39,6 +39,7 @@ class UserService extends Service {
     {
         if (!$user) {
             ResponseHelper::sendErrorJsonResponse('Email does not exist', 401);
+            exit();
         }
     }
 
@@ -47,6 +48,7 @@ class UserService extends Service {
         $isPasswordCorrect = password_verify($inputPassword, $realPasswordHash);
         if (!$isPasswordCorrect) {
             ResponseHelper::sendErrorJsonResponse('Invalid password', 401);
+            exit();
         }
     }
 
