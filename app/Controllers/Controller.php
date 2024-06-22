@@ -61,4 +61,23 @@ abstract class Controller
             exit();
         }
     }
+
+    /**
+     * This function parses uris of pattern '/api/text..text/123', and return the digit at the end.
+     */
+    protected function parseAndGetDigitsAtTheEndOfUri(): int
+    {
+        $requestUri = $_SERVER['REQUEST_URI'];
+        $matches = [];
+
+        if (preg_match('/^\/api\/[\w\/-]+\/(\d+)$/', $requestUri, $matches)) {
+            // Extract the {id} parameter caught by regex
+            $productId = $matches[1];
+        } else {
+            ResponseHelper::sendErrorJsonResponse('User Id not found', 404);
+            exit();
+        }
+
+        return $productId;
+    }
 }

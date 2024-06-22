@@ -55,7 +55,7 @@
                 "tags": [
                     "Product"
                 ],
-                "summary": "Update a product in database",
+                "summary": "Update a product",
                 "operationId": "a37e30aeabe77dfcbcf6f8a412973ea3",
                 "requestBody": {
                     "required": true,
@@ -79,7 +79,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Product is uccessfully updated"
+                        "description": "Product is updated"
                     },
                     "401": {
                         "description": "Authentication failure"
@@ -121,13 +121,49 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "A product is uccessfully added"
+                        "description": "A product is added"
                     },
                     "401": {
                         "description": "Authentication failure"
                     },
                     "422": {
                         "description": "Validation failure"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/product/{id}": {
+            "delete": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Delete a product",
+                "operationId": "9a598c7c634d43c6ce11b243a51f1889",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of a product",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Product is deleted"
+                    },
+                    "401": {
+                        "description": "Authentication failure"
+                    },
+                    "404": {
+                        "description": "Product not found"
                     }
                 },
                 "security": [

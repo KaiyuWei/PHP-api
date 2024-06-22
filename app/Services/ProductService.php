@@ -26,6 +26,11 @@ class ProductService extends Service
         return $this->model->update($data);
     }
 
+    public function deleteProduct(int $id): bool
+    {
+        return $this->model->delete($id);
+    }
+
     public function isProductExisting(string|int $identifier): bool
     {
         $isProductId = $this->isIdentifierDigit($identifier);

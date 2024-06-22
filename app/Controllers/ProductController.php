@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Helpers\Authenticator;
 use App\Helpers\ResponseHelper;
 use App\Services\ProductService;
 use App\Validators\ProductRequestValidator;
@@ -62,7 +61,7 @@ class ProductController extends Controller
      *                @OA\Property(property="name", type="string", example="IPhone 100"),
      *            ),
      *        ),
-     *     @OA\Response(response="201", description="A product is uccessfully added"),
+     *     @OA\Response(response="201", description="A product is added"),
      *     @OA\Response(response="401", description="Authentication failure"),
      *     @OA\Response(response="422", description="Validation failure"),
      * )
@@ -81,7 +80,7 @@ class ProductController extends Controller
     /**
      * @OA\Put(
      *     path="/api/product",
-     *     summary="Update a product in database",
+     *     summary="Update a product",
      *     tags={"Product"},
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
@@ -91,7 +90,7 @@ class ProductController extends Controller
      *                @OA\Property(property="name", type="string", example="IPhone 100"),
      *            ),
      *        ),
-     *     @OA\Response(response="200", description="Product is uccessfully updated"),
+     *     @OA\Response(response="200", description="Product is updated"),
      *     @OA\Response(response="401", description="Authentication failure"),
      *     @OA\Response(response="422", description="Validation failure"),
      *     @OA\Response(response="404", description="Product not found"),
@@ -106,5 +105,31 @@ class ProductController extends Controller
 
         $result = $this->service->updateProduct($data);
         if($result) ResponseHelper::sendSuccessJsonResponse('Product updated');
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/product/{id}",
+     *     summary="Delete a product",
+     *     tags={"Product"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true,
+     *         @OA\Schema(type="integer"),
+     *         description="The ID of a product",
+     *      ),
+     *     @OA\Response(response="204", description="Product is deleted"),
+     *     @OA\Response(response="401", description="Authentication failure"),
+     *     @OA\Response(response="404", description="Product not found"),
+     * )
+     */
+    public function deleteProduct(): void
+    {
+        $this->authenticateAdminUser();
+
+        $id = $this->parseAndGetDigitsAtTheEndOfUri();
+        $this->validate('validateForDeletingProduct', $id);
+
+        $result = $this->service->deleteProduct($id);
+        if($result) ResponseHelper::sendSuccessJsonResponse('Product deleted', 204);
     }
 }

@@ -42,7 +42,17 @@ class ProductRequestValidator extends Validator
             throw new \Exception('product name is too long', 422);
         }
 
-        $isProductFound = $this->service->isProductExisting($data['id']);
+        $this->validateProductExistenceAndThrowIfNotExisting($data['id']);
+    }
+
+    public function validateForDeletingProduct(int $id): void
+    {
+        $this->validateProductExistenceAndThrowIfNotExisting($id);
+    }
+
+    private function validateProductExistenceAndThrowIfNotExisting(int $id): void
+    {
+        $isProductFound = $this->service->isProductExisting($id);
         if(!$isProductFound) {
             throw new \Exception('product not found', 404);
         }
