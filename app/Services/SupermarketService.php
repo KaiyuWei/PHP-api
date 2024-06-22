@@ -12,8 +12,8 @@ class SupermarketService extends Service
 
     public function getProductsWithIdAndNameFields(): array
     {
-        if (!$this->model->getAll(['id', 'name'])) return [];
-        return $this->model->getAll(['id', 'name']);
+        $result = $this->model->getAll(['id', 'name']);
+        return $result ?? [];
     }
 
     public function isSupermarketExisting(string|int $identifier): bool

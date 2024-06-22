@@ -3,6 +3,7 @@
 namespace App\Routes;
 
 use App\Controllers\ProductController;
+use App\Controllers\StockController;
 use App\Controllers\SupermarketController;
 use App\Controllers\TestController;
 use App\Controllers\UserController;
@@ -24,6 +25,8 @@ class ApiRoutes {
         $router->post('/api/supermarket', [SupermarketController::class, 'addSupermarket']);
         $router->put('/api/supermarket', [SupermarketController::class, 'updateSupermarket']);
         $router->delete('/api/supermarket/{id}', [SupermarketController::class, 'deleteSupermarket']);
+
+        $router->get('/api/stock/index', [StockController::class, 'index']);
 
         $router->get('/api/test', [TestController::class, 'testGet']);
         $router->dispatchRequest();

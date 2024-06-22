@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Helpers\DynamicRouteParser;
 use App\Helpers\ResponseHelper;
 use App\Services\SupermarketService;
 use App\Validators\SupermarketRequestValidator;
