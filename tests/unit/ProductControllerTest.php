@@ -22,36 +22,44 @@ class ProductControllerTest extends TestCase
             ['id' => 2, 'name' => 'Product 2'],
         ];
 
-        $this->productService
-            ->expects($this->once())
-            ->method('getAll')
-            ->willReturn($mockData);
+        // mock the result of the function call "getAll()"
+        $this->productService->expects($this->once())->method('getAll')->willReturn($mockData);
 
-        ob_start();
-        $this->controller->index();
-        $output = ob_get_clean();
+        $output = $this->getIndexResultInOutputBuffer();
 
         $expectedOutput = json_encode(['data' => $mockData]);
         $this->assertEquals($expectedOutput, $output);
+    }
+
+    private function getIndexResultInOutputBuffer()
+    {
+        ob_start();
+        $this->controller->index();
+        return ob_get_clean();
     }
 
     private function createMockAndReflection(): void
     {
         $this->productService = $this->createMock(ProductService::class);
         $this->controller = new ProductController();
+        $this->mockAuthenticator();
+        $this->createReflectionForServicePropertyInController();
+    }
 
-        // Mock the controller and override the authenticateCurrentUser method
+    private function mockAuthenticator()
+    {
         $this->controller = $this->getMockBuilder(ProductController::class)
             ->onlyMethods(['authenticateCurrentUser'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        // Ensure authenticateCurrentUser does not call exit
         $this->controller->expects($this->once())
             ->method('authenticateCurrentUser')
             ->willReturnCallback(function() {});
+    }
 
-        // Use reflection to set the protected productService property
+    private function createReflectionForServicePropertyInController()
+    {
         $reflection = new \ReflectionClass($this->controller);
         $property = $reflection->getProperty('service');
         $property->setAccessible(true);
