@@ -6,8 +6,6 @@ use App\Models\Product;
 
 class ProductService extends Service
 {
-    protected Product $model;
-
     public function __construct() {
         $this->model = new Product();
     }

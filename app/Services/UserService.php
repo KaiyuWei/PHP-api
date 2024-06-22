@@ -6,16 +6,15 @@ use App\Models\User;
 use App\Helpers\ResponseHelper;
 
 class UserService extends Service {
-    protected User $userModel;
 
     public function __construct() {
-        $this->userModel = new User();
+        $this->model = new User();
     }
 
     public function login(array $data): string
     {
         list('email' => $email, 'password' => $password) = $data;
-        $user = $this->userModel->getByEmail($email, ['id', 'password']);
+        $user = $this->model->getByEmail($email, ['id', 'password']);
 
         $this->checkUserExistence($user);
         $this->checkPassword($password, $user['password']);
@@ -27,12 +26,12 @@ class UserService extends Service {
     {
         // only the role 'trainee' can be registered from the api.
         $data['role'] = 'trainee';
-        return $this->userModel->create($data);
+        return $this->model->create($data);
     }
 
     public function isEmailRegistered(string $email): bool
     {
-        $result = $this->userModel->getByEmail($email, ['id']);
+        $result = $this->model->getByEmail($email, ['id']);
         return !empty($result);
     }
 
@@ -54,7 +53,7 @@ class UserService extends Service {
     private function generateAndUpdateTokenForUser(int $userId): string
     {
         $token = bin2hex(openssl_random_pseudo_bytes(32));
-        $this->userModel->updateToken($userId, $token);
+        $this->model->updateToken($userId, $token);
 
         return $token;
     }
