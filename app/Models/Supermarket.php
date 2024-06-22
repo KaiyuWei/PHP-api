@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Database;
 use PDO;
 
-class Supermarkets extends Model
+class Supermarket extends Model
 {
     public function __construct() {
         $this->db = (new Database())->getConnection();

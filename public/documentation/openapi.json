@@ -173,6 +173,51 @@
                 ]
             }
         },
+        "/api/supermarket/index": {
+            "get": {
+                "tags": [
+                    "Supermarket"
+                ],
+                "summary": "List all supermarkets",
+                "operationId": "b9a8280e888b87bc800976e33d1363d3",
+                "responses": {
+                    "200": {
+                        "description": "Successful query",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failure"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/user/register": {
             "post": {
                 "tags": [
