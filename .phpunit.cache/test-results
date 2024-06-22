@@ -1,1 +1,1 @@
-{"version":1,"defects":{"ProductControllerTest::test_index":7},"times":{"ProductApiTest::test_return_true":0.001,"ProductControllerTest::test_index":0.001}}
+{"version":1,"defects":{"ProductControllerTest::test_index":7,"feature\\ProductApi\\ProductApiTest::testIndex":7},"times":{"ProductApiTest::test_return_true":0.001,"ProductControllerTest::test_index":0.001,"ProductApiTest::testIndex":0.006,"feature\\ProductApi\\ProductApiTest::testIndex":0.003}}
