@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Database;
+use Exception;
 use PDO;
 
 class Supermarket extends Model
 {
+    const OWNER_TYPE = 'supermarket';
+
     public function __construct() {
         $this->db = (new Database())->getConnection();
     }
@@ -16,8 +19,8 @@ class Supermarket extends Model
         $queryFields = $this->convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets";
-        $stmt = $this->db->query($sql);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $statement = $this->db->query($sql);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $result ?? [];
     }
 
@@ -26,9 +29,9 @@ class Supermarket extends Model
         $queryFields = $this->convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $statement = $this->db->prepare($sql);
+        $statement->execute(['id' => $id]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
     public function getByName(string $name, array $queryFields = [])
@@ -36,16 +39,16 @@ class Supermarket extends Model
         $queryFields = $this->convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets WHERE name = :name";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['name' => $name]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $statement = $this->db->prepare($sql);
+        $statement->execute(['name' => $name]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
     public function create(array $data): bool
     {
         $sql = "INSERT INTO supermarkets (name) VALUES (:name)";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([
+        $statement = $this->db->prepare($sql);
+        return $statement->execute([
             'name' => $data['name']
         ]);
     }
@@ -53,8 +56,8 @@ class Supermarket extends Model
     public function update(array $data): bool
     {
         $sql = "UPDATE supermarkets SET name = :name WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([
+        $statement = $this->db->prepare($sql);
+        return $statement->execute([
             'id' => $data['id'],
             'name' => $data['name']
         ]);
@@ -63,7 +66,22 @@ class Supermarket extends Model
     public function delete(int $id): bool
     {
         $sql = "DELETE FROM supermarkets WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute(['id' => $id]);
+        $statement = $this->db->prepare($sql);
+        return $statement->execute(['id' => $id]);
+    }
+
+    public function deleteWithOwnedStock(int $id): bool
+    {
+        try{
+            $this->db->beginTransaction();
+
+            (new Stock())->deleteByOwnerIdAndType($id, self::OWNER_TYPE, $this->db);
+            $this->delete($id);
+
+            return $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            return false;
+        }
     }
 }

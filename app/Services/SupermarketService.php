@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Stock;
 use App\Models\Supermarket;
 
 class SupermarketService extends Service
@@ -33,8 +34,8 @@ class SupermarketService extends Service
         return $this->model->update($data);
     }
 
-    public function deleteSupermarket(int $id): bool
+    public function deleteSupermarketAndItsStock(int $id): bool
     {
-        return $this->model->delete($id);
+        return $this->model->deleteWithOwnedStock($id);
     }
 }

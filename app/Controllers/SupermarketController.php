@@ -132,7 +132,7 @@ class SupermarketController extends Controller
         $id = $this->getIdInUriOrReturnNotFound();
         $this->validate('validateForDeletingSupermarket', $id);
 
-        $result = $this->service->deleteSupermarket($id);
+        $result = $this->service->deleteSupermarketAndItsStock($id);
         if($result) ResponseHelper::sendSuccessJsonResponse('Supermarket deleted', 204);
     }
 }

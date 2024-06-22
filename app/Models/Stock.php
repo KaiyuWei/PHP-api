@@ -82,6 +82,15 @@ class Stock extends Model
         return $stmt->execute(['id' => $id]);
     }
 
+    public function deleteByOwnerIdAndType(int $ownerId, string $ownerType, PDO|null &$pdo): bool
+    {
+        if(!$pdo) $pdo = $this->db;
+
+        $sql = "DELETE FROM stock WHERE owner_id = :ownerId AND owner_type = :ownerType";
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute(['ownerId' => $ownerId, 'ownerType' => $ownerType]);
+    }
+
     private function validateOwner(string $ownerType, int $ownerId): bool
     {
         if (!$this->isOwnerTypeAllowed($ownerType)) {
