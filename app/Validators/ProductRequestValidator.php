@@ -24,5 +24,9 @@ class ProductRequestValidator extends Validator
         if($isLongerThanAllowed) {
             throw new \Exception('product name is too long', 422);
         }
+
+        if($this->service->isProductExisting($data['name'])) {
+            throw new \Exception('product is existing', 422);
+        }
     }
 }

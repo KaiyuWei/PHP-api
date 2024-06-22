@@ -77,4 +77,10 @@ class ProductController extends Controller
         $result = $this->service->createProduct($data);
         if($result) ResponseHelper::sendSuccessJsonResponse('Product created', 201);
     }
+
+    public function updateProduct(): void
+    {
+        $this->authenticateAdminUser();
+
+    }
 }

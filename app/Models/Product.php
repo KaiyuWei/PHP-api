@@ -21,11 +21,23 @@ class Product extends Model
         return $result ?? [];
     }
 
-    public function getById(int $id): array
+    public function getById(int $id, array $queryFields = [])
     {
-        $sql = "SELECT * FROM products WHERE id = :id";
+        $queryFields = $this->convertQueryFieldsToString($queryFields);
+
+        $sql = "SELECT " . $queryFields . " FROM products WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getByName(string $name, array $queryFields = [])
+    {
+        $queryFields = $this->convertQueryFieldsToString($queryFields);
+
+        $sql = "SELECT " . $queryFields . " FROM products WHERE name = :name";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['name' => $name]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

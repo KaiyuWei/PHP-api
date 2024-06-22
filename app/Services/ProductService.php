@@ -20,4 +20,10 @@ class ProductService extends Service
     {
         return $this->model->create($data);
     }
+
+    public function isProductExisting($name): bool
+    {
+        $result = $this->model->getByName($name);
+        return !empty($result);
+    }
 }

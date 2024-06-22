@@ -29,7 +29,7 @@ class Authenticator
     public static function hasAdminRole(): bool
     {
         $user = self::getUser();
-        return $user ? $user['role'] : false;
+        return $user && $user['role'] === 'admin';
     }
 
     private static function removeBearerTokenPrefix(string $bearerToken): ?string
