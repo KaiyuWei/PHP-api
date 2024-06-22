@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Helpers\DynamicRouteParser;
 use App\Helpers\ResponseHelper;
 use App\Services\ProductService;
 use App\Validators\ProductRequestValidator;
@@ -126,10 +127,19 @@ class ProductController extends Controller
     {
         $this->authenticateAdminUser();
 
-        $id = $this->parseAndGetDigitsAtTheEndOfUri();
+        $id = $this->getProductIdOrReturnNotFound();
         $this->validate('validateForDeletingProduct', $id);
 
         $result = $this->service->deleteProduct($id);
         if($result) ResponseHelper::sendSuccessJsonResponse('Product deleted', 204);
+    }
+
+    private function getProductIdOrReturnNotFound()
+    {
+        $id = DynamicRouteParser::parseAndGetDigitsAtTheEndOfUri($_SERVER['REQUEST_URI']);
+        if($id) return $id;
+
+        ResponseHelper::sendErrorJsonResponse('User Id not found', 404);
+        exit();
     }
 }

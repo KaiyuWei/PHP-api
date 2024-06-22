@@ -62,32 +62,6 @@ class Router {
     private function isRouteMatched($route, $uri): bool
     {
         if ($route === $uri) return true;
-        return $this->isDymanicRoutingMatched($route, $uri);
+        return DynamicRouteParser::isDymanicRouteMatched($route, $uri);
     }
-
-    private function isDymanicRoutingMatched($route, $uri): bool
-    {
-        $route = trim($route, '/');
-        $uri = trim($uri, '/');
-
-        $routeParts = explode('/', $route);
-        $uriParts = explode('/', $uri);
-
-        // The last part of the route should be {id}
-        if (end($routeParts) !== '{id}') {
-            return false;
-        }
-        // The last part of the URI should be a digit
-        if (!ctype_digit(end($uriParts))) {
-            return false;
-        }
-
-        // Remove the last part (id) from both arrays
-        array_pop($routeParts);
-        array_pop($uriParts);
-
-        // Compare the remaining parts
-        return $routeParts === $uriParts;
-    }
-
 }
