@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Helpers\Authenticator;
 use App\Helpers\ResponseHelper;
 use App\Services\ProductService;
 use App\Validators\ProductRequestValidator;
@@ -19,6 +20,7 @@ class ProductController extends Controller
      *     path="/api/product/index",
      *     summary="List all products",
      *     tags={"Product"},
+     *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *          response="200",
      *          description="Successful query",
@@ -33,11 +35,17 @@ class ProductController extends Controller
      *                 )
      *              )
      *          )
-     *       )
+     *       ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Authentication failure",
+     *     ),
      * )
      */
     public function index(): void
     {
+        $this->authenticateCurrentUser();
+
         $data = $this->service->getAll();
         ResponseHelper::sendJsonResponse(['data' => $data]);
     }

@@ -38,8 +38,16 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Authentication failure"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/user/register": {
@@ -133,6 +141,15 @@
                         "description": "Validation failure"
                     }
                 }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     }

@@ -18,9 +18,11 @@ class User extends Model
         return $result ?? [];
     }
 
-    public function getById(int $id)
+    public function getById(int $id, array $queryFields = [])
     {
-        $sql = "SELECT * FROM users WHERE id = :id";
+        $queryFields = $this->convertQueryFieldsToString($queryFields);
+
+        $sql = "SELECT " . $queryFields . " FROM users WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -33,6 +35,16 @@ class User extends Model
         $sql = "SELECT " . $queryFields . " FROM users WHERE email = :email";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['email' => $email]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function getByToken(string $token, array $queryFields = [])
+    {
+        $queryFields = $this->convertQueryFieldsToString($queryFields);
+
+        $sql = "SELECT " . $queryFields . " FROM users WHERE token = :token";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['token' => $token]);
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
@@ -70,6 +82,13 @@ class User extends Model
     public function delete(int $id): bool
     {
         $sql = "DELETE FROM users WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute(['id' => $id]);
+    }
+
+    public function getRole(int $id): string
+    {
+        $sql = "SELECT role FROM users WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute(['id' => $id]);
     }

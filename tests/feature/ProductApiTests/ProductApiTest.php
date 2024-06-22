@@ -1,12 +1,15 @@
 <?php
 
-namespace feature\ProductApi;
+namespace feature\ProductApiTests;
 
 use App\Database;
 use PHPUnit\Framework\TestCase;
+use Tests\NeedUserInDB;
 
 class ProductApiTest extends TestCase
 {
+    use NeedUserInDB;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,6 +35,14 @@ class ProductApiTest extends TestCase
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        if ($this->authToken) {
+            $headers = [
+                'Authorization: Bearer ' . $this->authToken,
+            ];
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        }
+
         $response = curl_exec($ch);
         curl_close($ch);
         return $response;
@@ -41,10 +52,13 @@ class ProductApiTest extends TestCase
     {
         $pdo = (new Database())->getConnection();;
 
-        $pdo->exec("CREATE TABLE IF NOT EXISTS products (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL
-    )");
+        $pdo->exec(
+            "CREATE TABLE IF NOT EXISTS products (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(255) NOT NULL
+        )");
+
+        $this->prepareUserInDBAndGenerateToken('trainee');
 
         $pdo->exec("TRUNCATE TABLE products");
 

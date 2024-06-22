@@ -3,7 +3,6 @@
 use App\Controllers\ProductController;
 use PHPUnit\Framework\TestCase;
 use App\Services\ProductService;
-use App\Helpers\ResponseHelper;
 
 class ProductControllerTest extends TestCase
 {
@@ -23,8 +22,6 @@ class ProductControllerTest extends TestCase
             ['id' => 2, 'name' => 'Product 2'],
         ];
 
-        $temp = [];
-
         $this->productService
             ->expects($this->once())
             ->method('getAll')
@@ -42,6 +39,17 @@ class ProductControllerTest extends TestCase
     {
         $this->productService = $this->createMock(ProductService::class);
         $this->controller = new ProductController();
+
+        // Mock the controller and override the authenticateCurrentUser method
+        $this->controller = $this->getMockBuilder(ProductController::class)
+            ->onlyMethods(['authenticateCurrentUser'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // Ensure authenticateCurrentUser does not call exit
+        $this->controller->expects($this->once())
+            ->method('authenticateCurrentUser')
+            ->willReturnCallback(function() {});
 
         // Use reflection to set the protected productService property
         $reflection = new \ReflectionClass($this->controller);
