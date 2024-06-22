@@ -8,19 +8,19 @@ class StockQueryFilter extends QueryFilter
     public function __construct()
     {
         parent::__construct();
-        $this->columns = self::FILTERABLE_COLUMNS;
+        $this->filterableColumns = self::FILTERABLE_COLUMNS;
     }
 
-    public function buildWhereClause(array $filters): string
+    public function createWhereClause(array $filters): string
     {
-        $whereClauseComponents = $this->createWhereClauseComponentArray($filters);
-        return $this->createWhereClause($whereClauseComponents);
+        $whereClauseComponents = $this->s($filters);
+        return $this->createWhereClauseFromComponents($whereClauseComponents);
     }
 
-    private function createWhereClauseComponentArray(array $filters): array
+    private function s(array $filters): array
     {
         $whereClauseComponents = [];
-        foreach($this->columns as $column)
+        foreach($this->filterableColumns as $column)
         {
             if (!empty($filters[$column])) {
                 $whereClauseComponents[] = sprintf('%s = :%s', $column, $column);
@@ -29,7 +29,7 @@ class StockQueryFilter extends QueryFilter
         return $whereClauseComponents;
     }
 
-    private function createWhereClause(array $whereClauseComponents): string
+    private function createWhereClauseFromComponents(array $whereClauseComponents): string
     {
         $whereClause = '';
         if (!empty($whereClauseComponents)) {

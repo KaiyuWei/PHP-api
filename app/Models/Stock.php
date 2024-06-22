@@ -31,7 +31,7 @@ class Stock extends Model
 
     public function getAllWith($filters, $sortBy, $sortOrder, $limit, $offset) {
 
-        $whereClause = (new StockQueryFilter())->buildWhereClause($filters);
+        $whereClause = (new StockQueryFilter())->createWhereClause($filters);
 
 //        foreach($this->columns as $column)
 //        {

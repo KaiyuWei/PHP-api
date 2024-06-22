@@ -12,13 +12,13 @@ class StockQueryFilterTest extends TestCase
         parent::setUp();
     }
 
-    public function test_build_where_clause_method()
+    public function test_create_where_clause_method()
     {
         $stockFilter = new StockQueryFilter();
 
         $filters1 = [];
         $expected1 = '';
-        $actual1 = $stockFilter->buildWhereClause($filters1);
+        $actual1 = $stockFilter->createWhereClause($filters1);
 
         $filters2 = [
             'product_id' => 12,
@@ -26,7 +26,7 @@ class StockQueryFilterTest extends TestCase
             'non_existing_column' => 'blablabla',
             'quantity' => 3];
         $expected2 = 'WHERE product_id = :product_id AND owner_type = :owner_type AND quantity = :quantity';
-        $actual2 = $stockFilter->buildWhereClause($filters2);
+        $actual2 = $stockFilter->createWhereClause($filters2);
 
         $this->assertEquals($expected1, $actual1);
         $this->assertEquals($expected2, $actual2);

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\QueryFilters;
+namespace App\QuerySorters;
 
-abstract class QueryFilter
+abstract class QuerySorter
 {
     protected array $filterableColumns;
 
