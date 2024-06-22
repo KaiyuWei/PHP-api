@@ -53,7 +53,7 @@ class ProductController extends Controller
     /**
      * @OA\Post(
      *     path="/api/product",
-     *     summary="add a product in database",
+     *     summary="Add a product in database",
      *     tags={"Product"},
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
@@ -78,9 +78,33 @@ class ProductController extends Controller
         if($result) ResponseHelper::sendSuccessJsonResponse('Product created', 201);
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/product",
+     *     summary="Update a product in database",
+     *     tags={"Product"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *            required=true,
+     *            @OA\JsonContent(
+     *                @OA\Property(property="id", type="int", example=123),
+     *                @OA\Property(property="name", type="string", example="IPhone 100"),
+     *            ),
+     *        ),
+     *     @OA\Response(response="200", description="Product is uccessfully updated"),
+     *     @OA\Response(response="401", description="Authentication failure"),
+     *     @OA\Response(response="422", description="Validation failure"),
+     *     @OA\Response(response="404", description="Product not found"),
+     * )
+     */
     public function updateProduct(): void
     {
         $this->authenticateAdminUser();
 
+        $data = $this->getDataFromRequest();
+        $this->validate('validateForUpdatingProduct', $data);
+
+        $result = $this->service->updateProduct($data);
+        if($result) ResponseHelper::sendSuccessJsonResponse('Product updated');
     }
 }

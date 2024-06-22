@@ -51,11 +51,57 @@
             }
         },
         "/api/product": {
+            "put": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Update a product in database",
+                "operationId": "a37e30aeabe77dfcbcf6f8a412973ea3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 123
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "IPhone 100"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product is uccessfully updated"
+                    },
+                    "401": {
+                        "description": "Authentication failure"
+                    },
+                    "422": {
+                        "description": "Validation failure"
+                    },
+                    "404": {
+                        "description": "Product not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Product"
                 ],
-                "summary": "add a product in database",
+                "summary": "Add a product in database",
                 "operationId": "e397660ec66e31cdfa34501a6ceb6beb",
                 "requestBody": {
                     "required": true,

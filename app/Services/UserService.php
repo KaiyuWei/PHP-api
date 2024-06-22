@@ -37,7 +37,7 @@ class UserService extends Service {
 
     public function getUser(string|int $identifier): array|false
     {
-        $isUserId = $this->isIdentifierAnUserId($identifier);
+        $isUserId = $this->isIdentifierDigit($identifier);
         $user = $isUserId ? $this->model->getById($identifier) : $this->model->getByToken($identifier);
 
         return $user;
@@ -47,11 +47,6 @@ class UserService extends Service {
     {
         $user = $this->getUser($identifier);
         return $user ? $user['role'] : false;
-    }
-
-    private function isIdentifierAnUserId(string|int $identifier): bool
-    {
-        return gettype($identifier) === 'integer' || ctype_digit($identifier);
     }
 
     private function checkUserExistence($user):void

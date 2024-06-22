@@ -50,12 +50,12 @@ class Product extends Model
         ]);
     }
 
-    public function update(int $id, array $data): bool
+    public function update(array $data): bool
     {
         $sql = "UPDATE products SET name = :name WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
-            'id' => $id,
+            'id' => $data['id'],
             'name' => $data['name']
         ]);
     }

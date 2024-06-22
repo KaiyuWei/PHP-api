@@ -16,6 +16,7 @@ class ApiRoutes {
 
         $router->get('/api/product/index', [ProductController::class, 'index']);
         $router->post('/api/product', [ProductController::class, 'addProduct']);
+        $router->put('/api/product', [ProductController::class, 'updateProduct']);
 
         $router->get('/api/test', [TestController::class, 'testGet']);
         $router->dispatchRequest();

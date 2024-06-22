@@ -21,9 +21,15 @@ class ProductService extends Service
         return $this->model->create($data);
     }
 
-    public function isProductExisting($name): bool
+    public function updateProduct(array $data): bool
     {
-        $result = $this->model->getByName($name);
+        return $this->model->update($data);
+    }
+
+    public function isProductExisting(string|int $identifier): bool
+    {
+        $isProductId = $this->isIdentifierDigit($identifier);
+        $result = $isProductId ? $this->model->getById($identifier) : $this->model->getByName($identifier);
         return !empty($result);
     }
 }
