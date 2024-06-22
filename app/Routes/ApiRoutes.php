@@ -21,6 +21,7 @@ class ApiRoutes {
         $router->delete('/api/product/{id}', [ProductController::class, 'deleteProduct']);
 
         $router->get('/api/supermarket/index', [SupermarketController::class, 'index']);
+        $router->post('/api/supermarket', [SupermarketController::class, 'addSupermarket']);
 
         $router->get('/api/test', [TestController::class, 'testGet']);
         $router->dispatchRequest();

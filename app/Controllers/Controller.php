@@ -46,7 +46,7 @@ abstract class Controller
         return json_decode(file_get_contents('php://input'), true);
     }
 
-    protected function authenticateCurrentUser(): void
+    protected function authenticateUser(): void
     {
         if (!Authenticator::isAuthenticated()) {
             ResponseHelper::sendErrorJsonResponse('No access to resource', 401);

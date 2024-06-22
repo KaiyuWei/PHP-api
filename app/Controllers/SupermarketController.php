@@ -43,9 +43,37 @@ class SupermarketController extends Controller
      */
     public function index(): void
     {
-        $this->authenticateCurrentUser();
+        $this->authenticateUser();
 
         $data = $this->service->getProductsWithIdAndNameFields();
         ResponseHelper::sendJsonResponse(['data' => $data]);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/supermarket",
+     *     summary="Add a supermarket in database",
+     *     tags={"Supermarket"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *            required=true,
+     *            @OA\JsonContent(
+     *                @OA\Property(property="name", type="string", example="Albert Heijn"),
+     *            ),
+     *        ),
+     *     @OA\Response(response="201", description="A supermarket is added"),
+     *     @OA\Response(response="401", description="Authentication failure"),
+     *     @OA\Response(response="422", description="Validation failure"),
+     * )
+     */
+    public function addSupermarket(): void
+    {
+        $this->authenticateAdminUser();
+
+        $data = $this->getDataFromRequest();
+        $this->validate('validateForCreatingSupermarket', $data);
+
+        $result = $this->service->createSupermarket($data);
+        if($result) ResponseHelper::sendSuccessJsonResponse('Supermarket created', 201);
     }
 }

@@ -49,12 +49,12 @@ class ProductControllerTest extends TestCase
     private function mockAuthenticator()
     {
         $this->controller = $this->getMockBuilder(ProductController::class)
-            ->onlyMethods(['authenticateCurrentUser'])
+            ->onlyMethods(['authenticateUser'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->controller->expects($this->once())
-            ->method('authenticateCurrentUser')
+            ->method('authenticateUser')
             ->willReturnCallback(function() {});
     }
 

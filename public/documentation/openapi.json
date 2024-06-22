@@ -218,6 +218,47 @@
                 ]
             }
         },
+        "/api/supermarket": {
+            "post": {
+                "tags": [
+                    "Supermarket"
+                ],
+                "summary": "Add a supermarket in database",
+                "operationId": "6a1c8ba330f0ebbff3076990942ebeae",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Albert Heijn"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "A supermarket is added"
+                    },
+                    "401": {
+                        "description": "Authentication failure"
+                    },
+                    "422": {
+                        "description": "Validation failure"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/user/register": {
             "post": {
                 "tags": [

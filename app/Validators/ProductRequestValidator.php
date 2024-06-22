@@ -20,7 +20,7 @@ class ProductRequestValidator extends Validator
             throw new \Exception('product name is required', 422);
         }
 
-        $isLongerThanAllowed = strlen($data['name']) > self::MAX_NAME_LENGTH;
+        $isLongerThanAllowed = strlen($data['name']) > static::MAX_NAME_LENGTH;
         if($isLongerThanAllowed) {
             throw new \Exception('product name is too long', 422);
         }

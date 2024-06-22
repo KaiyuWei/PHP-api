@@ -44,7 +44,7 @@ class ProductController extends Controller
      */
     public function index(): void
     {
-        $this->authenticateCurrentUser();
+        $this->authenticateUser();
 
         $data = $this->service->getProductsWithIdAndNameFields();
         ResponseHelper::sendJsonResponse(['data' => $data]);
