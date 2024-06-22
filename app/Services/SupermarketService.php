@@ -27,4 +27,9 @@ class SupermarketService extends Service
     {
         return $this->model->create($data);
     }
+
+    public function updateSupermarket(array $data): bool
+    {
+        return $this->model->update($data);
+    }
 }

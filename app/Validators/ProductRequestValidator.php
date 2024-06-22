@@ -17,7 +17,7 @@ class ProductRequestValidator extends Validator
     {
         $isRequiredDataMissing = empty($data['name']);
         if($isRequiredDataMissing) {
-            throw new \Exception('product name is required', 422);
+            throw new \Exception('product name is required', 400);
         }
 
         $isLongerThanAllowed = strlen($data['name']) > static::MAX_NAME_LENGTH;
@@ -34,7 +34,7 @@ class ProductRequestValidator extends Validator
     {
         $isRequiredDataMissing = empty($data['id']) || empty($data['name']);
         if($isRequiredDataMissing) {
-            throw new \Exception('product id, name are required', 422);
+            throw new \Exception('product id, name are required', 400);
         }
 
         $isLongerThanAllowed = strlen($data['name']) > self::MAX_NAME_LENGTH;

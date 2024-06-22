@@ -43,7 +43,10 @@ abstract class Controller
 
     protected function getDataFromRequest(): array
     {
-        return json_decode(file_get_contents('php://input'), true);
+        $data = json_decode(file_get_contents('php://input'), true);
+        $this->validate('checkIfInputNull', $data);
+
+        return $data;
     }
 
     protected function authenticateUser(): void

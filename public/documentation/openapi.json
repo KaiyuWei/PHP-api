@@ -81,14 +81,17 @@
                     "200": {
                         "description": "Product is updated"
                     },
+                    "400": {
+                        "description": "Input data is invalide"
+                    },
                     "401": {
                         "description": "Authentication failure"
                     },
-                    "422": {
-                        "description": "Validation failure"
-                    },
                     "404": {
                         "description": "Product not found"
+                    },
+                    "422": {
+                        "description": "Input data is unprocessable"
                     }
                 },
                 "security": [
@@ -123,11 +126,14 @@
                     "201": {
                         "description": "A product is added"
                     },
+                    "400": {
+                        "description": "Input data is invalide"
+                    },
                     "401": {
                         "description": "Authentication failure"
                     },
                     "422": {
-                        "description": "Validation failure"
+                        "description": "Input data is unprocessable"
                     }
                 },
                 "security": [
@@ -158,6 +164,9 @@
                 "responses": {
                     "204": {
                         "description": "Product is deleted"
+                    },
+                    "400": {
+                        "description": "Input data is invalide"
                     },
                     "401": {
                         "description": "Authentication failure"
@@ -219,6 +228,55 @@
             }
         },
         "/api/supermarket": {
+            "put": {
+                "tags": [
+                    "Supermarket"
+                ],
+                "summary": "Update a supermarket",
+                "operationId": "178eecabc9cb3d81e62b999defdf13b6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 123
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Jumbo"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Supermarket is updated"
+                    },
+                    "400": {
+                        "description": "Input data is invalide"
+                    },
+                    "401": {
+                        "description": "Authentication failure"
+                    },
+                    "404": {
+                        "description": "Supermarket not found"
+                    },
+                    "422": {
+                        "description": "Input data is unprocessable"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Supermarket"
@@ -248,8 +306,11 @@
                     "401": {
                         "description": "Authentication failure"
                     },
+                    "400": {
+                        "description": "Input data is invalide"
+                    },
                     "422": {
-                        "description": "Validation failure"
+                        "description": "Input data is unprocessable"
                     }
                 },
                 "security": [
@@ -294,8 +355,11 @@
                     "201": {
                         "description": "A user is uccessfully registered"
                     },
+                    "400": {
+                        "description": "Input data is invalide"
+                    },
                     "422": {
-                        "description": "Validation failure"
+                        "description": "Input data is unprocessable"
                     }
                 }
             }
@@ -346,8 +410,11 @@
                     "401": {
                         "description": "Invalid email or password"
                     },
+                    "400": {
+                        "description": "Input data is invalide"
+                    },
                     "422": {
-                        "description": "Validation failure"
+                        "description": "Input data is unprocessable"
                     }
                 }
             }

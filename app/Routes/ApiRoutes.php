@@ -22,6 +22,7 @@ class ApiRoutes {
 
         $router->get('/api/supermarket/index', [SupermarketController::class, 'index']);
         $router->post('/api/supermarket', [SupermarketController::class, 'addSupermarket']);
+        $router->put('/api/supermarket', [SupermarketController::class, 'updateSupermarket']);
 
         $router->get('/api/test', [TestController::class, 'testGet']);
         $router->dispatchRequest();

@@ -63,7 +63,8 @@ class SupermarketController extends Controller
      *        ),
      *     @OA\Response(response="201", description="A supermarket is added"),
      *     @OA\Response(response="401", description="Authentication failure"),
-     *     @OA\Response(response="422", description="Validation failure"),
+     *     @OA\Response(response="400", description="Input data is invalide"),
+     *     @OA\Response(response="422", description="Input data is unprocessable"),
      * )
      */
     public function addSupermarket(): void
@@ -75,5 +76,36 @@ class SupermarketController extends Controller
 
         $result = $this->service->createSupermarket($data);
         if($result) ResponseHelper::sendSuccessJsonResponse('Supermarket created', 201);
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/supermarket",
+     *     summary="Update a supermarket",
+     *     tags={"Supermarket"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *            required=true,
+     *            @OA\JsonContent(
+     *                @OA\Property(property="id", type="integer", example=123),
+     *                @OA\Property(property="name", type="string", example="Jumbo"),
+     *            ),
+     *        ),
+     *     @OA\Response(response="200", description="Supermarket is updated"),
+     *     @OA\Response(response="400", description="Input data is invalide"),
+     *     @OA\Response(response="401", description="Authentication failure"),
+     *     @OA\Response(response="404", description="Supermarket not found"),
+     *     @OA\Response(response="422", description="Input data is unprocessable"),
+     * )
+     */
+    public function updateSupermarket(): void
+    {
+        $this->authenticateAdminUser();
+
+        $data = $this->getDataFromRequest();
+        $this->validate('validateForUpdatingSupermarket', $data);
+
+        $result = $this->service->updateSupermarket($data);
+        if($result) ResponseHelper::sendSuccessJsonResponse('Supermarket updated');
     }
 }

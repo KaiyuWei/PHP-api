@@ -63,8 +63,9 @@ class ProductController extends Controller
      *            ),
      *        ),
      *     @OA\Response(response="201", description="A product is added"),
+     *     @OA\Response(response="400", description="Input data is invalide"),
      *     @OA\Response(response="401", description="Authentication failure"),
-     *     @OA\Response(response="422", description="Validation failure"),
+     *     @OA\Response(response="422", description="Input data is unprocessable"),
      * )
      */
     public function addProduct(): void
@@ -92,9 +93,10 @@ class ProductController extends Controller
      *            ),
      *        ),
      *     @OA\Response(response="200", description="Product is updated"),
+     *     @OA\Response(response="400", description="Input data is invalide"),
      *     @OA\Response(response="401", description="Authentication failure"),
-     *     @OA\Response(response="422", description="Validation failure"),
      *     @OA\Response(response="404", description="Product not found"),
+     *     @OA\Response(response="422", description="Input data is unprocessable"),
      * )
      */
     public function updateProduct(): void
@@ -119,6 +121,7 @@ class ProductController extends Controller
      *         description="The ID of a product",
      *      ),
      *     @OA\Response(response="204", description="Product is deleted"),
+     *     @OA\Response(response="400", description="Input data is invalide"),
      *     @OA\Response(response="401", description="Authentication failure"),
      *     @OA\Response(response="404", description="Product not found"),
      * )
@@ -139,7 +142,7 @@ class ProductController extends Controller
         $id = DynamicRouteParser::parseAndGetDigitsAtTheEndOfUri($_SERVER['REQUEST_URI']);
         if($id) return $id;
 
-        ResponseHelper::sendErrorJsonResponse('User Id not found', 404);
+        ResponseHelper::sendErrorJsonResponse('User Id is required in the path');
         exit();
     }
 }

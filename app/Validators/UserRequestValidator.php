@@ -19,7 +19,7 @@ class UserRequestValidator extends Validator
     {
         $isRequiredDataMissing = empty($data['name']) || empty($data['email']) || empty($data['password']);
         if($isRequiredDataMissing) {
-            throw new \Exception('Name, email and password are required', 422);
+            throw new \Exception('Name, email and password are required', 400);
         }
 
         $isNameLongerThanAllowed = strlen($data['name']) > self::MAX_NAME_LENGTH;
@@ -42,7 +42,7 @@ class UserRequestValidator extends Validator
     {
         $isRequiredDataMissing = empty($data['email']) || empty($data['password']);
         if($isRequiredDataMissing) {
-            throw new \Exception('Email and password are required', 422);
+            throw new \Exception('Email and password are required', 400);
         }
     }
 }
