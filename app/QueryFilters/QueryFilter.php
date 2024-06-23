@@ -19,7 +19,7 @@ abstract class QueryFilter
         return $this->createWhereClauseFromComponents($whereClauseComponents);
     }
 
-    private function createWhereClauseComponents(array $filters): array
+    protected function createWhereClauseComponents(array $filters): array
     {
         $whereClauseComponents = [];
         foreach($this->filterableColumns as $column)
@@ -31,7 +31,7 @@ abstract class QueryFilter
         return $whereClauseComponents;
     }
 
-    private function createWhereClauseFromComponents(array $whereClauseComponents): string
+    protected function createWhereClauseFromComponents(array $whereClauseComponents): string
     {
         $whereClause = '';
         if (!empty($whereClauseComponents)) {
