@@ -104,6 +104,23 @@ class StockModelTest extends TestCase
         $actual = $this->stock->getAllWith($queryFields, $filters, $orderBys, $limit, $offset);
         $this->assertEquals($expected, $actual);
     }
+
+    public function test_get_all_with_does_not_return_not_allowed_query_fields()
+    {
+        $queryFields = ['id', 'product_id', 'entry_time', 'created_at'];  // 'created_at' is not a allowed query field
+        $filters = ['product_id' => 1, 'id' => 3];  // id is not an allowed filter fields
+        $orderBys = ['entry_time' => 'DESC', 'product_id' => 'DESC', 'quantity' => 'ASC']; // 'product_id' is not a sortable field
+        $limit = 3;
+        $offset = 2;
+
+        $expected = [
+            ['id' => 16, 'product_id' => 1, 'entry_time' => '2024-06-24 01:00:00'],
+            ['id' => 1, 'product_id' => 1, 'entry_time' => '2024-06-23 10:00:00']
+        ];
+
+        $actual = $this->stock->getAllWith($queryFields, $filters, $orderBys, $limit, $offset);
+        $this->assertEquals($expected, $actual);
+    }
 }
 
 ?>
