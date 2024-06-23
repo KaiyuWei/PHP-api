@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use App\QueryFilters\QueryFilter;
-use App\QueryFilters\StockQueryFilter;
 use App\QuerySorters\QuerySorter;
 
 class QueryStringCreator
@@ -26,6 +25,8 @@ class QueryStringCreator
         $whereClause = $this->filter->createWhereClause($filters);
         $sortByClause = $this->sorter->createOrderByClause($orderBys);
         $limitAndOffsetClause = $this->createLimitAndOffsetClause($limit, $offset);
+
+        return $this->combineClausesToQueryString($selectClause, $whereClause, $sortByClause, $limitAndOffsetClause);
     }
 
     public function createSelectClause(string $tableName, array $queryFields = []): string
@@ -46,5 +47,21 @@ class QueryStringCreator
         $limitString = "LIMIT $limit";
         $offsetString = $offset ? " OFFSET $offset" : "";
         return sprintf('%s%s', $limitString, $offsetString);
+    }
+
+    protected function combineClausesToQueryString(
+        string $select,
+        string $where,
+        string $sortBy,
+        string $limitAndOffset
+    ): string
+    {
+        $query = $select;
+
+        if($where) $query = "$query $where";
+        if($sortBy) $query = "$query $sortBy";
+        if($limitAndOffset) $query = "$query $limitAndOffset";
+
+        return $query . ';';
     }
 }

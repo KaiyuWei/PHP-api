@@ -21,9 +21,4 @@ abstract class Model
     }
 
     abstract protected function initializeFilterAndSorter(): void;
-    
-    protected function convertQueryFieldsToString(array $queryFields): string
-    {
-        return empty($queryFields) ? '*' : implode(', ', $queryFields);
-    }
 }
