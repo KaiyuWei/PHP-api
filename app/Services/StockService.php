@@ -20,6 +20,26 @@ class StockService extends Service
         ]);
         return $result ?? [];
     }
+
+    public function getAllWithOptionsAndPagination(
+        array $queryFields = [],
+        array $filters = [],
+        array $orderBys = [],
+        int $page = 0,
+        int $recordPerPage = 10,
+    )
+    {
+        if ($page) {
+            $offset = ($page - 1) * $recordPerPage;
+        }
+        else {
+            $recordPerPage = 0;
+            $offset = 0;
+        }
+
+        return $this->getAllWithOptions($queryFields, $filters, $orderBys, $recordPerPage, $offset);
+    }
+
     public function getAllWithOptions(
         array $queryFields = [],
         array $filters = [],

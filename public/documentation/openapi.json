@@ -191,10 +191,12 @@
                 "operationId": "b4ab05a6265f470e4c8c7c35c8c7f0a6",
                 "parameters": [
                     {
-                        "name": "Query fields",
+                        "name": "fields[]",
                         "in": "query",
                         "description": "Fields to be queried, provided as an array of strings",
                         "required": false,
+                        "style": "form",
+                        "explode": true,
                         "schema": {
                             "type": "array",
                             "items": {
@@ -208,58 +210,73 @@
                         ]
                     },
                     {
-                        "name": "Query filters",
+                        "name": "filters",
                         "in": "query",
                         "description": "Filters for the query",
                         "required": false,
                         "schema": {
                             "type": "object",
-                            "anyOf": [
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "integer"
-                                },
-                                {
-                                    "type": "string",
-                                    "format": "date-time"
-                                },
-                                {
-                                    "type": "float"
-                                }
-                            ]
+                            "additionalProperties": {
+                                "oneOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "integer"
+                                    },
+                                    {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    {
+                                        "type": "number",
+                                        "format": "float"
+                                    }
+                                ]
+                            }
                         },
                         "example": {
-                            "product_id": 1,
-                            "owner_type": "supermarket"
+                            "filters": {
+                                "product_id": 1,
+                                "owner_type": "supermarket"
+                            }
                         }
                     },
                     {
-                        "name": "Order by",
+                        "name": "orderBy",
                         "in": "query",
                         "description": "Query results order by",
                         "required": false,
                         "schema": {
                             "type": "object",
-                            "oneOf": [
-                                {
-                                    "type": "string"
-                                }
-                            ]
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         },
                         "example": {
-                            "entry_time": "DESC",
-                            "owner_id": "ASC"
+                            "orderBy": {
+                                "entry_time": "DESC",
+                                "owner_id": "ASC"
+                            }
                         }
                     },
                     {
-                        "name": "Page",
+                        "name": "page",
                         "in": "query",
                         "description": "Number of Page",
                         "required": false,
                         "schema": {
-                            "description": "Number of page",
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "example": 1
+                    },
+                    {
+                        "name": "recordPerPage",
+                        "in": "query",
+                        "description": "Number of records per page",
+                        "required": false,
+                        "schema": {
                             "type": "integer",
                             "minimum": 1
                         },
@@ -595,6 +612,7 @@
         }
     },
     "components": {
+        "schemas": {},
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",

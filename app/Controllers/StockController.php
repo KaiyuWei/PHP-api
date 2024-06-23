@@ -21,62 +21,76 @@ class StockController extends Controller
      *     tags={"Stock"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
-     *          name="Query fields",
+     *         name="fields[]",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="array",
+     *             @OA\Items(type="string")
+     *         ),
+     *         style="form",
+     *         explode=true,
+     *         example={"id", "owner_id", "entry_time"},
+     *         description="Fields to be queried, provided as an array of strings"
+     *     ),
+     *     @OA\Parameter(
+     *          name="filters",
      *          in="query",
      *          required=false,
      *          @OA\Schema(
-     *              type="array",
-     *              @OA\Items(type="string"),
+     *              type="object",
+     *              additionalProperties=@OA\Schema(
+     *                  oneOf={
+     *                      @OA\Schema(type="string"),
+     *                      @OA\Schema(type="integer"),
+     *                      @OA\Schema(type="string", format="date-time"),
+     *                      @OA\Schema(type="number", format="float")
+     *                  }
+     *              )
      *          ),
-     *          example={"id", "owner_id", "entry_time"},
-     *          description="Fields to be queried, provided as an array of strings",
+     *          example={"filters": {"product_id": 1, "owner_type": "supermarket"}},
+     *          description="Filters for the query"
      *      ),
      *     @OA\Parameter(
-     *           name="Query filters",
-     *           in="query",
-     *           required=false,
-     *           @OA\Schema(
-     *               type="object",
-     *               anyOf={
-     *                  @OA\Schema(type="string"),
-     *                  @OA\Schema(type="integer"),
-     *                  @OA\Schema(type="string", format="date-time"),
-     *                  @OA\Schema(type="float"),
-     *              },
-     *           ),
-     *           example={"product_id": 1, "owner_type": "supermarket"},
-     *           description="Filters for the query",
-     *       ),
+     *          name="orderBy",
+     *          in="query",
+     *          required=false,
+     *          @OA\Schema(
+     *              type="object",
+     *              additionalProperties=@OA\Schema(
+     *                  type="string"
+     *              )
+     *          ),
+     *          example={"orderBy": {"entry_time": "DESC", "owner_id": "ASC"}},
+     *          description="Query results order by"
+     *      ),
      *     @OA\Parameter(
-     *            name="Order by",
-     *            in="query",
-     *            required=false,
-     *            @OA\Schema(
-     *                type="object",
-     *                oneOf={
-     *                   @OA\Schema(type="string"),
-     *               },
-     *            ),
-     *            example={"entry_time": "DESC", "owner_id": "ASC"},
-     *            description="Query results order by",
-     *        ),
-     *     @OA\Parameter(
-     *             name="Page",
-     *             in="query",
-     *             required=false,
-     *             @OA\Schema(
-     *                 type="integer",
-     *                 minimum=1,
-     *                 description="Number of page",
-     *             ),
-     *             example=1,
-     *             description="Number of Page",
+     *         name="page",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer",
+     *             minimum=1
      *         ),
+     *         example=1,
+     *         description="Number of Page"
+     *     ),
+     *     @OA\Parameter(
+     *         name="recordPerPage",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer",
+     *             minimum=1
+     *         ),
+     *         example=1,
+     *         description="Number of records per page"
+     *     ),
      *     @OA\Response(
-     *          response="200",
-     *          description="Successful query",
-     *          @OA\JsonContent(
-     *              @OA\Property(
+     *         response="200",
+     *         description="Successful query",
+     *         @OA\JsonContent(
+     *             @OA\Property(
      *                 property="data",
      *                 type="array",
      *                 @OA\Items(
@@ -86,22 +100,23 @@ class StockController extends Controller
      *                     @OA\Property(property="owner_id", type="integer"),
      *                     @OA\Property(property="owner_type", type="string"),
      *                     @OA\Property(property="quantity", type="integer"),
-     *                     @OA\Property(property="entry_time", type="string", format="date-time"),
+     *                     @OA\Property(property="entry_time", type="string", format="date-time")
      *                 )
-     *              )
-     *          )
-     *       ),
+     *             )
+     *         )
+     *     ),
      *     @OA\Response(
      *         response="401",
-     *         description="Authentication failure",
-     *     ),
+     *         description="Authentication failure"
+     *     )
      * )
      */
     public function index(): void
     {
         $this->authenticateUser();
 
-        $data = $this->service->getStockList();
+        $data = $this->service->getAllWithOptionsAndPagination();
+        file_put_contents(__DIR__ . '/../../storage/logs', json_encode($_GET) . "\n");
         ResponseHelper::sendJsonResponse(['data' => $data]);
     }
 }
