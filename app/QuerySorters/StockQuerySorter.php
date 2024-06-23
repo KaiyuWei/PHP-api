@@ -8,7 +8,6 @@ class StockQuerySorter extends QuerySorter
     public function __construct()
     {
         parent::__construct();
-        $this->initiateSortableColumns();
     }
 
     protected function initiateSortableColumns(): void

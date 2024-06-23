@@ -8,6 +8,7 @@ abstract class QuerySorter
 
     public function __construct()
     {
+        $this->initiateSortableColumns();
     }
 
     abstract protected function initiateSortableColumns(): void;

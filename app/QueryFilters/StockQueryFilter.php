@@ -8,7 +8,6 @@ class StockQueryFilter extends QueryFilter
     public function __construct()
     {
         parent::__construct();
-        $this->initiateFilterableColumns();
     }
 
     protected function initiateFilterableColumns(): void
