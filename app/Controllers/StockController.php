@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Helpers\ResponseHelper;
 use App\Services\StockService;
 use App\Validators\StockRequestValidator;
+use Exception;
 
 class StockController extends Controller
 {
@@ -73,7 +74,7 @@ class StockController extends Controller
      *             minimum=1
      *         ),
      *         example=1,
-     *         description="Number of Page"
+     *         description="Page Number"
      *     ),
      *     @OA\Parameter(
      *         name="recordPerPage",
@@ -115,8 +116,27 @@ class StockController extends Controller
     {
         $this->authenticateUser();
 
-        $data = $this->service->getAllWithOptionsAndPagination();
-        file_put_contents(__DIR__ . '/../../storage/logs', json_encode($_GET) . "\n");
+        $validated = $this->getValidatedQueryParamsForIndexRequest();
+        list(
+            'fields' => $queryFields,
+            'filters' => $filters,
+            'orderBy' => $orderBy,
+            'page' => $page,
+            'recordPerPage' => $recordPerPage
+            ) = $validated;
+
+        $data = $this->service->getAllWithOptionsAndPagination($queryFields, $filters, $orderBy, $page, $recordPerPage);
         ResponseHelper::sendJsonResponse(['data' => $data]);
+    }
+
+    private function getValidatedQueryParamsForIndexRequest(): array
+    {
+        try {
+            $validated = $this->validator->getValidatedQueryParamsForIndexRequest();
+        } catch (Exception $e) {
+            ResponseHelper::sendErrorJsonResponse($e->getMessage(), $e->getCode());
+            exit();
+        }
+        return $validated;
     }
 }

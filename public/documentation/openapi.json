@@ -263,7 +263,7 @@
                     {
                         "name": "page",
                         "in": "query",
-                        "description": "Number of Page",
+                        "description": "Page Number",
                         "required": false,
                         "schema": {
                             "type": "integer",
