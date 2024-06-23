@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\QueryStringCreator;
 use App\QueryFilters\GeneralQueryFilter;
 use App\QuerySorters\GeneralQuerySorter;
 use PDO;
@@ -20,7 +21,7 @@ class Product extends Model
 
     public function getAll(array $queryFields = []): array
     {
-        $queryFields = $this->convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM products";
         $stmt = $this->db->query($sql);
@@ -30,7 +31,7 @@ class Product extends Model
 
     public function getById(int $id, array $queryFields = [])
     {
-        $queryFields = $this->convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM products WHERE id = :id";
         $stmt = $this->db->prepare($sql);
@@ -40,7 +41,7 @@ class Product extends Model
 
     public function getByName(string $name, array $queryFields = [])
     {
-        $queryFields = $this->convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM products WHERE name = :name";
         $stmt = $this->db->prepare($sql);

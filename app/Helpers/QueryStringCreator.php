@@ -30,11 +30,11 @@ class QueryStringCreator
 
     public function createSelectClause(string $tableName, array $queryFields = []): string
     {
-        $queryFieldsString = $this->convertQueryFieldsToString($queryFields);
+        $queryFieldsString = self::convertQueryFieldsToString($queryFields);
         return 'SELECT ' . $queryFieldsString . ' FROM ' . $tableName;
     }
 
-    public function convertQueryFieldsToString(array $queryFields): string
+    public static function convertQueryFieldsToString(array $queryFields): string
     {
         return empty($queryFields) ? '*' : implode(', ', $queryFields);
     }

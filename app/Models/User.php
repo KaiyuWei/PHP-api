@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Database;
+use App\Helpers\QueryStringCreator;
 use App\QueryFilters\GeneralQueryFilter;
 use App\QuerySorters\GeneralQuerySorter;
 use PDO;
@@ -28,7 +28,7 @@ class User extends Model
 
     public function getById(int $id, array $queryFields = [])
     {
-        $queryFields = $this->convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM users WHERE id = :id";
         $stmt = $this->db->prepare($sql);
@@ -38,7 +38,7 @@ class User extends Model
 
     public function getByEmail(string $email, array $queryFields = [])
     {
-        $queryFields = $this->convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM users WHERE email = :email";
         $stmt = $this->db->prepare($sql);
@@ -48,7 +48,7 @@ class User extends Model
 
     public function getByToken(string $token, array $queryFields = [])
     {
-        $queryFields = $this->convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM users WHERE token = :token";
         $stmt = $this->db->prepare($sql);

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Database;
+use App\Helpers\QueryStringCreator;
 use App\QueryFilters\GeneralQueryFilter;
 use App\QueryFilters\StockQueryFilter;
 use App\QuerySorters\GeneralQuerySorter;
@@ -30,7 +31,7 @@ class Stock extends Model
 
     public function getAll(array $queryFields = []): array
     {
-        $queryFields = $this->convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM stock";
         $statement = $this->db->query($sql);
@@ -75,7 +76,7 @@ class Stock extends Model
 
     public function getById(int $id, array $queryFields = [])
     {
-        $queryFields = $this->convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM stock WHERE id = :id";
         $statement = $this->db->prepare($sql);

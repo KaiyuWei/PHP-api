@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Database;
+use App\Helpers\QueryStringCreator;
 use App\QueryFilters\GeneralQueryFilter;
 use App\QuerySorters\GeneralQuerySorter;
 use Exception;
@@ -24,7 +24,7 @@ class Supermarket extends Model
 
     public function getAll(array $queryFields = []): array
     {
-        $queryFields = $this->convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets";
         $statement = $this->db->query($sql);
@@ -34,7 +34,7 @@ class Supermarket extends Model
 
     public function getById(int $id, array $queryFields = [])
     {
-        $queryFields = $this->convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets WHERE id = :id";
         $statement = $this->db->prepare($sql);
@@ -44,7 +44,7 @@ class Supermarket extends Model
 
     public function getByName(string $name, array $queryFields = [])
     {
-        $queryFields = $this->convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets WHERE name = :name";
         $statement = $this->db->prepare($sql);
