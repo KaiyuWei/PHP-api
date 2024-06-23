@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Model;
 use App\QueryFilters\QueryFilter;
 use App\QuerySorters\QuerySorter;
 
@@ -32,6 +33,12 @@ class QueryStringCreator
     public static function convertQueryFieldsToString(array $queryFields): string
     {
         return empty($queryFields) ? '*' : implode(', ', $queryFields);
+    }
+
+    public static function convertQueryFieldsToStringWithFieldsLimit(array $queryFields, array $allowedFields): string
+    {
+        $queriedFields = array_intersect($queryFields, $allowedFields);
+        return self::convertQueryFieldsToString($queriedFields);
     }
 
     public function createValueBindingArray(array $filters): array

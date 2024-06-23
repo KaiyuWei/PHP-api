@@ -10,6 +10,8 @@ use Exception;
 
 class Stock extends Model
 {
+    const QUERIABLE_FIELDS = ['id', 'product_id', 'owner_id', 'owner_type', 'quantity', 'entry_time'];
+
     protected string $tableName;
 
     const OWNER_TYPE_TABLE_MAPPING = [
@@ -29,9 +31,14 @@ class Stock extends Model
         $this->sorter = new StockQuerySorter();
     }
 
+    protected function initializeQueriableFields(): void
+    {
+        $this->queriableFields = self::QUERIABLE_FIELDS;
+    }
+
     public function getAll(array $queryFields = []): array
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);
 
         $sql = "SELECT " . $queryFields . " FROM stock";
         $statement = $this->db->query($sql);
@@ -48,7 +55,8 @@ class Stock extends Model
         int $offset = 0)
     {
         $queryCreator = new QueryStringCreator($this->filter, $this->sorter);
-        $sql = $queryCreator->createSelectQuery($this->tableName, $queryFields, $filters, $orderBys, $limit, $offset);
+        $allowedQueryFields = $this->getAllowedQueryFields($queryFields);
+        $sql = $queryCreator->createSelectQuery($this->tableName, $allowedQueryFields, $filters, $orderBys, $limit, $offset);
         $params = $queryCreator->createValueBindingArray($filters);
 
         $statement = $this->db->prepare($sql);
@@ -60,7 +68,7 @@ class Stock extends Model
 
     public function getById(int $id, array $queryFields = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
 
         $sql = "SELECT " . $queryFields . " FROM stock WHERE id = :id";
         $statement = $this->db->prepare($sql);

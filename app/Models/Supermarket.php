@@ -12,6 +12,8 @@ class Supermarket extends Model
 {
     const OWNER_TYPE = 'supermarket';
 
+    const QUERIABLE_FIELDS = ['id', 'name'];
+
     public function __construct() {
         parent::__construct();
     }
@@ -22,9 +24,14 @@ class Supermarket extends Model
         $this->sorter = new GeneralQuerySorter();
     }
 
+    protected function initializeQueriableFields(): void
+    {
+        $this->queriableFields = self::QUERIABLE_FIELDS;
+    }
+
     public function getAll(array $queryFields = []): array
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets";
         $statement = $this->db->query($sql);
@@ -34,7 +41,7 @@ class Supermarket extends Model
 
     public function getById(int $id, array $queryFields = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets WHERE id = :id";
         $statement = $this->db->prepare($sql);
@@ -44,7 +51,7 @@ class Supermarket extends Model
 
     public function getByName(string $name, array $queryFields = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets WHERE name = :name";
         $statement = $this->db->prepare($sql);

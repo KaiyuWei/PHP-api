@@ -9,6 +9,8 @@ use PDO;
 
 class User extends Model
 {
+    const QUERIABLE_FIELDS = ['id', 'name', 'email', 'role'];
+
     public function __construct() {
         parent::__construct();
     }
@@ -17,6 +19,11 @@ class User extends Model
     {
         $this->filter = new GeneralQueryFilter();
         $this->sorter = new GeneralQuerySorter();
+    }
+
+    protected function initializeQueriableFields(): void
+    {
+        $this->queriableFields = self::QUERIABLE_FIELDS;
     }
 
     public function getAll(): array
@@ -28,7 +35,7 @@ class User extends Model
 
     public function getById(int $id, array $queryFields = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);
 
         $sql = "SELECT " . $queryFields . " FROM users WHERE id = :id";
         $stmt = $this->db->prepare($sql);
@@ -38,7 +45,7 @@ class User extends Model
 
     public function getByEmail(string $email, array $queryFields = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
 
         $sql = "SELECT " . $queryFields . " FROM users WHERE email = :email";
         $stmt = $this->db->prepare($sql);
@@ -48,7 +55,7 @@ class User extends Model
 
     public function getByToken(string $token, array $queryFields = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
 
         $sql = "SELECT " . $queryFields . " FROM users WHERE token = :token";
         $stmt = $this->db->prepare($sql);
