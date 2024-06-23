@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-use App\Database;
 use App\Helpers\QueryStringCreator;
-use App\QueryFilters\GeneralQueryFilter;
 use App\QueryFilters\StockQueryFilter;
-use App\QuerySorters\GeneralQuerySorter;
 use App\QuerySorters\StockQuerySorter;
 use PDO;
 use Exception;
@@ -28,8 +25,8 @@ class Stock extends Model
 
     protected function initializeFilterAndSorter(): void
     {
-        $this->filter = new GeneralQueryFilter();
-        $this->sorter = new GeneralQuerySorter();
+        $this->filter = new StockQueryFilter();
+        $this->sorter = new StockQuerySorter();
     }
 
     public function getAll(array $queryFields = []): array
@@ -42,6 +39,7 @@ class Stock extends Model
         return $result ?? [];
     }
 
+    //@todo: rename the function
     public function getAllWith(
         array $queryFields = [],
         array $filters = [],
@@ -53,17 +51,11 @@ class Stock extends Model
         $sql = $queryCreator->createSelectQuery($this->tableName, $queryFields, $filters, $orderBys, $limit, $offset);
         $params = $queryCreator->createValueBindingArray($filters);
 
-        // Prepare and execute the statement
-        $stmt = $this->db->prepare($sql);
-        foreach ($params as $key => $value) {
-            $stmt->bindValue($key, $value);
-        }
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $statement = $this->db->prepare($sql);
+        $this->bindValueToStatement($statement, $params);
+        $statement->execute();
 
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getById(int $id, array $queryFields = [])

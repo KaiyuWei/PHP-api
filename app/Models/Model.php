@@ -6,6 +6,7 @@ use App\Database;
 use App\QueryFilters\QueryFilter;
 use App\QuerySorters\QuerySorter;
 use PDO;
+use PDOStatement;
 
 abstract class Model
 {
@@ -21,4 +22,11 @@ abstract class Model
     }
 
     abstract protected function initializeFilterAndSorter(): void;
+
+    protected function bindValueToStatement(PDOStatement &$statement, array $params): void
+    {
+        foreach ($params as $key => $value) {
+            $statement->bindValue($key, $value);
+        }
+    }
 }

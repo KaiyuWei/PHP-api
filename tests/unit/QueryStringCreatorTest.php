@@ -69,22 +69,30 @@ class QueryStringCreatorTest extends TestCase
 
     public function test_create_select_query_method()
     {
-        $this->filter->method('createWhereClause')
-            ->willReturn('WHERE name = :name AND id = :id');
+        $filter = new StockQueryFilter();
+        $sorter = new StockQuerySorter();
+        $creator = new QueryStringCreator($filter, $sorter);
 
-        $this->sorter->method('createOrderByClause')
-            ->willReturn('ORDER BY name ASC, id DESC');
-
-        $tableName = 'users';
-        $queryFields = ['id', 'name', 'email'];
-        $filters = ['name' => 'John', 'id' => 1];
-        $orderBys = ['name' => 'ASC', 'id' => 'DESC'];
+        $tableName = 'stock';
+        $queryFields = ['product_id', 'owner_type'];
+        $filters = ['name' => 'John', 'product_id' => 1];
+        $orderBys = ['entry_time' => 'ASC', 'id' => 'DESC'];
         $limit = 10;
         $offset = 5;
 
-        $queryString = $this->queryStringCreator->createSelectQuery($tableName, $queryFields, $filters, $orderBys, $limit, $offset);
-        $expectedQueryString = 'SELECT id, name, email FROM users WHERE name = :name AND id = :id ORDER BY name ASC, id DESC LIMIT 10 OFFSET 5;';
+        $queryString = $creator->createSelectQuery($tableName, $queryFields, $filters, $orderBys, $limit, $offset);
+        $expectedQueryString = 'SELECT product_id, owner_type FROM stock WHERE product_id = :product_id ORDER BY entry_time ASC LIMIT 10 OFFSET 5;';
+        $this->assertEquals($expectedQueryString, $queryString);
 
+        $tableName = 'stock';
+        $queryFields = ['id', 'product_id', 'owner_id', 'owner_type', 'quantity', 'entry_time'];
+        $filters = ['product_id' => 10, 'id' => 3];  // using 'id' to filter stock is not allowed
+        $orderBys = ['entry_time' => 'DESC'];
+        $limit = 5;
+        $offset = 0;
+
+        $queryString = $creator->createSelectQuery($tableName, $queryFields, $filters, $orderBys, $limit, $offset);
+        $expectedQueryString = 'SELECT id, product_id, owner_id, owner_type, quantity, entry_time FROM stock WHERE product_id = :product_id ORDER BY entry_time DESC LIMIT 5;';
         $this->assertEquals($expectedQueryString, $queryString);
     }
 
