@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Helpers\DynamicRouteParser;
 use App\Helpers\ResponseHelper;
 use App\Services\StockService;
 use App\Validators\StockRequestValidator;
@@ -167,8 +168,101 @@ class StockController extends Controller
     public function getSupermarketStock(): void
     {
         $this->authenticateUser();
-        $data = $this->service->getStock('supermarket');
+        $this->getStock();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/stock/outlet/{id}",
+     *     summary="Get the stock of an outlet",
+     *     tags={"Stock"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true,
+     *          @OA\Schema(type="integer"),
+     *          description="The ID of an outlet",
+     *       ),
+     *     @OA\Response(
+     *          response="200",
+     *          description="Successful query",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer"),
+     *                     @OA\Property(property="product_id", type="integer"),
+     *                     @OA\Property(property="owner_id", type="integer"),
+     *                     @OA\Property(property="owner_type", type="string"),
+     *                     @OA\Property(property="quantity", type="integer"),
+     *                     @OA\Property(property="entry_time", type="string", format="date-time")
+     *                 )
+     *              )
+     *          )
+     *       ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Authentication failure",
+     *     ),
+     * )
+     */
+    public function getOutletStock(): void
+    {
+        $this->authenticateUser();
+        $this->getStock();
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/stock/wholesaler/{id}",
+     *     summary="Get the stock of a wholesaler",
+     *     tags={"Stock"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true,
+     *          @OA\Schema(type="integer"),
+     *          description="The ID of a wholesaler",
+     *       ),
+     *     @OA\Response(
+     *          response="200",
+     *          description="Successful query",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer"),
+     *                     @OA\Property(property="product_id", type="integer"),
+     *                     @OA\Property(property="owner_id", type="integer"),
+     *                     @OA\Property(property="owner_type", type="string"),
+     *                     @OA\Property(property="quantity", type="integer"),
+     *                     @OA\Property(property="entry_time", type="string", format="date-time")
+     *                 )
+     *              )
+     *          )
+     *       ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Authentication failure",
+     *     ),
+     * )
+     */
+    public function getWholesalerStock(): void
+    {
+        $this->authenticateUser();
+        $this->getStock();
+    }
+
+    private function getStock(): void
+    {
+        $ownerType = $this->getOwnerTypeInRoute();
+        $data = $this->service->getStock($ownerType);
         ResponseHelper::sendJsonResponse(['data' => $data]);
+    }
+
+    private function getOwnerTypeInRoute(): string
+    {
+        return DynamicRouteParser::extractTypeFromRoute($_SERVER['REQUEST_URI']);
     }
 
     private function getValidatedQueryParamsForIndexRequest(): array

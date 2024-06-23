@@ -49,4 +49,16 @@ class DynamicRouteParser
 
         return false;
     }
+
+    /**
+     * parse the route /api/stock/<owner_type>/{id} and get the <owner_type>.
+     */
+    public static function extractTypeFromRoute($route): ?string
+    {
+        $pattern = '/^\/api\/stock\/([a-zA-Z]+)\/\d+$/';
+        if (preg_match($pattern, $route, $matches)) {
+            return $matches[1];
+        }
+        return null;
+    }
 }

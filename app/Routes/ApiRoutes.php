@@ -27,6 +27,8 @@ class ApiRoutes {
 
         $router->get('/api/stock/index', [StockController::class, 'index']);
         $router->get('/api/stock/supermarket/{id}', [StockController::class, 'getSupermarketStock']);
+        $router->get('/api/stock/outlet/{id}', [StockController::class, 'getOutletStock']);
+        $router->get('/api/stock/wholesaler/{id}', [StockController::class, 'getWholesalerStock']);
 
         $router->dispatchRequest();
     }
