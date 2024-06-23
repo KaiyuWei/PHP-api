@@ -13,6 +13,11 @@ abstract class QueryFilter
 
     abstract protected function initiateFilterableColumns(): void;
 
+    public function getFilterableColumns(): array
+    {
+        return $this->filterableColumns;
+    }
+
     public function createWhereClause(array $filters): string
     {
         $whereClauseComponents = $this->createWhereClauseComponents($filters);

@@ -13,6 +13,8 @@ use Exception;
 
 class Stock extends Model
 {
+    protected string $tableName;
+
     const OWNER_TYPE_TABLE_MAPPING = [
         'supermarket' => 'supermarkets',
         'wholesaler' => 'wholesalers',
@@ -21,6 +23,7 @@ class Stock extends Model
 
     public function __construct() {
         parent::__construct();
+        $this->tableName = 'stock';
     }
 
     protected function initializeFilterAndSorter(): void
@@ -39,27 +42,16 @@ class Stock extends Model
         return $result ?? [];
     }
 
-    public function getAllWith(array $filters, array $orderBys, $limit, $offset) {
-
-        $whereClause = (new StockQueryFilter())->createWhereClause($filters);
-
-//        foreach($this->columns as $column)
-//        {
-//            if (!empty($filters[$column])) {
-//                $paramKey = ':' . $column;
-//                $params[$paramKey] = $filters[$column];
-//            }
-//        }
-
-        // Sorting
-        $orderByClause = (new StockQuerySorter())->createOrderByClause($orderBys);
-
-        // Pagination
-        $limit = intval($limit);
-        $offset = intval($offset);
-
-        // Construct the SQL query
-        $sql = "SELECT * FROM stock $whereClause $orderByClause LIMIT :limit OFFSET :offset";
+    public function getAllWith(
+        array $queryFields = [],
+        array $filters = [],
+        array $orderBys = [],
+        int $limit = 0,
+        int $offset = 0)
+    {
+        $queryCreator = new QueryStringCreator($this->filter, $this->sorter);
+        $sql = $queryCreator->createSelectQuery($this->tableName, $queryFields, $filters, $orderBys, $limit, $offset);
+        $params = $queryCreator->createValueBindingArray($filters);
 
         // Prepare and execute the statement
         $stmt = $this->db->prepare($sql);

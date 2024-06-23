@@ -29,15 +29,31 @@ class QueryStringCreator
         return $this->combineClausesToQueryString($selectClause, $whereClause, $sortByClause, $limitAndOffsetClause);
     }
 
+    public static function convertQueryFieldsToString(array $queryFields): string
+    {
+        return empty($queryFields) ? '*' : implode(', ', $queryFields);
+    }
+
+    public function createValueBindingArray(array $filters): array
+    {
+        $allowedFilters = $this->filter->getFilterableColumns();
+        $params = [];
+
+        foreach($allowedFilters as $filterName)
+        {
+            if (!empty($filters[$filterName])) {
+                $paramKey = ':' . $filterName;
+                $params[$paramKey] = $filters[$filterName];
+            }
+        }
+
+        return $params;
+    }
+
     public function createSelectClause(string $tableName, array $queryFields = []): string
     {
         $queryFieldsString = self::convertQueryFieldsToString($queryFields);
         return 'SELECT ' . $queryFieldsString . ' FROM ' . $tableName;
-    }
-
-    public static function convertQueryFieldsToString(array $queryFields): string
-    {
-        return empty($queryFields) ? '*' : implode(', ', $queryFields);
     }
 
     public function createLimitAndOffsetClause(int $limit, int $offset): string
