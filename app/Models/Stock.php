@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Database;
 use App\QueryFilters\StockQueryFilter;
+use App\QuerySorters\StockQuerySorter;
 use PDO;
 use Exception;
 
@@ -29,7 +30,7 @@ class Stock extends Model
         return $result ?? [];
     }
 
-    public function getAllWith($filters, $sortBy, $sortOrder, $limit, $offset) {
+    public function getAllWith(array $filters, array $orderBys, $limit, $offset) {
 
         $whereClause = (new StockQueryFilter())->createWhereClause($filters);
 
@@ -42,16 +43,14 @@ class Stock extends Model
 //        }
 
         // Sorting
-        $sortColumns = ['entry_time', 'quantity']; // Define sortable columns
-        $sortBy = in_array($sortBy, $sortColumns) ? $sortBy : 'entry_time';
-        $sortOrder = strtoupper($sortOrder) === 'ASC' ? 'ASC' : 'DESC';
+        $orderByClause = (new StockQuerySorter())->createOrderByClause($orderBys);
 
         // Pagination
         $limit = intval($limit);
         $offset = intval($offset);
 
         // Construct the SQL query
-        $sql = "SELECT * FROM stock $whereClause ORDER BY $sortBy $sortOrder LIMIT :limit OFFSET :offset";
+        $sql = "SELECT * FROM stock $whereClause $orderByClause LIMIT :limit OFFSET :offset";
 
         // Prepare and execute the statement
         $stmt = $this->db->prepare($sql);
