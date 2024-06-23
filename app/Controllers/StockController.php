@@ -20,6 +20,58 @@ class StockController extends Controller
      *     summary="List all stock",
      *     tags={"Stock"},
      *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *          name="Query fields",
+     *          in="query",
+     *          required=false,
+     *          @OA\Schema(
+     *              type="array",
+     *              @OA\Items(type="string"),
+     *          ),
+     *          example={"id", "owner_id", "entry_time"},
+     *          description="Fields to be queried, provided as an array of strings",
+     *      ),
+     *     @OA\Parameter(
+     *           name="Query filters",
+     *           in="query",
+     *           required=false,
+     *           @OA\Schema(
+     *               type="object",
+     *               anyOf={
+     *                  @OA\Schema(type="string"),
+     *                  @OA\Schema(type="integer"),
+     *                  @OA\Schema(type="string", format="date-time"),
+     *                  @OA\Schema(type="float"),
+     *              },
+     *           ),
+     *           example={"product_id": 1, "owner_type": "supermarket"},
+     *           description="Filters for the query",
+     *       ),
+     *     @OA\Parameter(
+     *            name="Order by",
+     *            in="query",
+     *            required=false,
+     *            @OA\Schema(
+     *                type="object",
+     *                oneOf={
+     *                   @OA\Schema(type="string"),
+     *               },
+     *            ),
+     *            example={"entry_time": "DESC", "owner_id": "ASC"},
+     *            description="Query results order by",
+     *        ),
+     *     @OA\Parameter(
+     *             name="Page",
+     *             in="query",
+     *             required=false,
+     *             @OA\Schema(
+     *                 type="integer",
+     *                 minimum=1,
+     *                 description="Number of page",
+     *             ),
+     *             example=1,
+     *             description="Number of Page",
+     *         ),
      *     @OA\Response(
      *          response="200",
      *          description="Successful query",

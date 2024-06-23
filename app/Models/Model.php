@@ -35,9 +35,19 @@ abstract class Model
         }
     }
 
-    protected function getAllowedQueryFields(array $requestedFields): array
+    public function getAllowedQueryFields(array $requestedFields): array
     {
         if (!$requestedFields) return $this->queriableFields;
         return array_intersect($requestedFields, $this->queriableFields);
+    }
+
+    public function executeSqlQuery(string $query, array $bindingParams = [])
+    {
+        $statement = $this->db->prepare($query);
+
+        if (!empty($bindingParams)) $this->bindValueToStatement($statement, $bindingParams);
+
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

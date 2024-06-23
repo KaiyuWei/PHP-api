@@ -36,6 +36,11 @@ class Stock extends Model
         $this->queriableFields = self::QUERIABLE_FIELDS;
     }
 
+    public function getTableName(): string
+    {
+        return $this->tableName;
+    }
+
     public function getAll(array $queryFields = []): array
     {
         $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);
@@ -44,26 +49,6 @@ class Stock extends Model
         $statement = $this->db->query($sql);
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $result ?? [];
-    }
-
-    //@todo: rename the function
-    public function getAllWith(
-        array $queryFields = [],
-        array $filters = [],
-        array $orderBys = [],
-        int $limit = 0,
-        int $offset = 0)
-    {
-        $queryCreator = new QueryStringCreator($this->filter, $this->sorter);
-        $allowedQueryFields = $this->getAllowedQueryFields($queryFields);
-        $sql = $queryCreator->createSelectQuery($this->tableName, $allowedQueryFields, $filters, $orderBys, $limit, $offset);
-        $params = $queryCreator->createValueBindingArray($filters);
-
-        $statement = $this->db->prepare($sql);
-        $this->bindValueToStatement($statement, $params);
-        $statement->execute();
-
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getById(int $id, array $queryFields = [])

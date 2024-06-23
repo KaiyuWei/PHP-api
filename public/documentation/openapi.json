@@ -189,6 +189,83 @@
                 ],
                 "summary": "List all stock",
                 "operationId": "b4ab05a6265f470e4c8c7c35c8c7f0a6",
+                "parameters": [
+                    {
+                        "name": "Query fields",
+                        "in": "query",
+                        "description": "Fields to be queried, provided as an array of strings",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "example": [
+                            "id",
+                            "owner_id",
+                            "entry_time"
+                        ]
+                    },
+                    {
+                        "name": "Query filters",
+                        "in": "query",
+                        "description": "Filters for the query",
+                        "required": false,
+                        "schema": {
+                            "type": "object",
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                {
+                                    "type": "float"
+                                }
+                            ]
+                        },
+                        "example": {
+                            "product_id": 1,
+                            "owner_type": "supermarket"
+                        }
+                    },
+                    {
+                        "name": "Order by",
+                        "in": "query",
+                        "description": "Query results order by",
+                        "required": false,
+                        "schema": {
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "example": {
+                            "entry_time": "DESC",
+                            "owner_id": "ASC"
+                        }
+                    },
+                    {
+                        "name": "Page",
+                        "in": "query",
+                        "description": "Number of Page",
+                        "required": false,
+                        "schema": {
+                            "description": "Number of page",
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "example": 1
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful query",
