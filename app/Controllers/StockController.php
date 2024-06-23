@@ -129,6 +129,48 @@ class StockController extends Controller
         ResponseHelper::sendJsonResponse(['data' => $data]);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/stock/supermarket/{id}",
+     *     summary="Get the stock of a supermarket",
+     *     tags={"Stock"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true,
+     *          @OA\Schema(type="integer"),
+     *          description="The ID of a supermarket",
+     *       ),
+     *     @OA\Response(
+     *          response="200",
+     *          description="Successful query",
+     *          @OA\JsonContent(
+     *              @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer"),
+     *                     @OA\Property(property="product_id", type="integer"),
+     *                     @OA\Property(property="owner_id", type="integer"),
+     *                     @OA\Property(property="owner_type", type="string"),
+     *                     @OA\Property(property="quantity", type="integer"),
+     *                     @OA\Property(property="entry_time", type="string", format="date-time")
+     *                 )
+     *              )
+     *          )
+     *       ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Authentication failure",
+     *     ),
+     * )
+     */
+    public function getSupermarketStock(): void
+    {
+        $this->authenticateUser();
+        $data = $this->service->getStock('supermarket');
+        ResponseHelper::sendJsonResponse(['data' => $data]);
+    }
+
     private function getValidatedQueryParamsForIndexRequest(): array
     {
         try {

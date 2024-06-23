@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\DynamicRouteParser;
 use App\Helpers\QueryStringCreator;
 use App\Models\Stock;
 use App\QueryFilters\StockQueryFilter;
@@ -13,21 +14,12 @@ class StockService extends Service
         $this->model = new Stock();
     }
 
-    public function getStockList(): array
-    {
-        $result = $this->model->getAll([
-            'product_id', 'owner_id', 'owner_type', 'quantity', 'entry_time'
-        ]);
-        return $result ?? [];
-    }
-
     public function getAllWithOptionsAndPagination(
         array $queryFields = [],
         array $filters = [],
         array $orderBys = [],
         int $page = 0,
-        int $recordPerPage = 10,
-    )
+        int $recordPerPage = 10)
     {
         if ($page) {
             $offset = ($page - 1) * $recordPerPage;
@@ -38,6 +30,17 @@ class StockService extends Service
         }
 
         return $this->getAllWithOptions($queryFields, $filters, $orderBys, $recordPerPage, $offset);
+    }
+
+    public function getStock(string $ownerType)
+    {
+        $ownerId = DynamicRouteParser::parseAndGetDigitsAtTheEndOfUri($_SERVER['REQUEST_URI']);
+        $filters = [
+            'owner_type' => $ownerType,
+            'owner_id' => $ownerId
+        ];
+
+        return $this->getAllWithOptionsAndPagination([], $filters);
     }
 
     public function getAllWithOptions(
