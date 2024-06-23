@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Database;
+use App\QueryFilters\GeneralQueryFilter;
 use App\QueryFilters\StockQueryFilter;
+use App\QuerySorters\GeneralQuerySorter;
 use App\QuerySorters\StockQuerySorter;
 use PDO;
 use Exception;
@@ -17,7 +19,13 @@ class Stock extends Model
     ];
 
     public function __construct() {
-        $this->db = (new Database())->getConnection();
+        parent::__construct();
+    }
+
+    protected function initializeFilterAndSorter(): void
+    {
+        $this->filter = new GeneralQueryFilter();
+        $this->sorter = new GeneralQuerySorter();
     }
 
     public function getAll(array $queryFields = []): array

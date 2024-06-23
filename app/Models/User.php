@@ -3,12 +3,20 @@
 namespace App\Models;
 
 use App\Database;
+use App\QueryFilters\GeneralQueryFilter;
+use App\QuerySorters\GeneralQuerySorter;
 use PDO;
 
 class User extends Model
 {
     public function __construct() {
-        $this->db = (new Database())->getConnection();
+        parent::__construct();
+    }
+
+    protected function initializeFilterAndSorter(): void
+    {
+        $this->filter = new GeneralQueryFilter();
+        $this->sorter = new GeneralQuerySorter();
     }
 
     public function getAll(): array

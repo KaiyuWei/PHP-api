@@ -25,6 +25,7 @@ class QueryStringCreator
         $selectClause = $this->createSelectClause($tableName, $queryFields);
         $whereClause = $this->filter->createWhereClause($filters);
         $sortByClause = $this->sorter->createOrderByClause($orderBys);
+        $limitAndOffsetClause = $this->createLimitAndOffsetClause($limit, $offset);
     }
 
     public function createSelectClause(string $tableName, array $queryFields = []): string
