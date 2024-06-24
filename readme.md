@@ -39,6 +39,14 @@ The app has some most basic classes for serving requests:
 #### Validator
 `Validator` is used for checking the validity of data sent by request. With them, invalid data, dangerous data, not-allowed data... will be rejected with corresponding error messages and status code.
 
+Validation handles these cases:
+1. Invalid Input Types: Ensure that all inputs are of the expected type (e.g., string, array...). 
+2. Missing Required Fields: Check for the presence of all required fields in the request body. 
+3. Boundary Values: Test for minimum and maximum acceptable values for fields, e.g. longest name or email string allowed. 
+4. Non-existent Resources: Handle cases where the requested resource does not exist.
+5. Duplicate Resources. Prevent creation of resources that already exist (unique constraints). 
+6. Sensitive Data Exposure: Only allowed fields can be queried, filtered.
+
 #### Filtering, Sorting and Pagination
 `QueryFilter` and `QuerySorter` handle filtering and sorting respectively. As for pagination, it involves some calculation of the query offset, together with `LIMIT` in sql queries. You can find the the interesting logic in methods of `StockService` class. 
 
@@ -46,10 +54,16 @@ The app has some most basic classes for serving requests:
 - When a user logs in, a token is generated, stored in the `token` column of `users` table, and send to the client in response. This token can is used for authentication. Exception for "Register" and "Login" apis, All the other CRUD options need user authentication.
 - `role` column in `users` table is for authorization. Currently there are two roles for users: `admin` and `trainee`.
 
+Authentication handles these cases:
+1. Missing or Invalid Tokens: Ensure that authentication tokens are provided and are valid.
+2. Insufficient Permissions: Check that current user is an `admin` 
+
 ### Database Optimization
 - On `stock` table, a composite index of `product_id`, `owner_id`, and `owner_type` is added. Since I store stock from all owners in one table, many queries can benefit from this index. You can imagine that many we have a log of needs for checking a specific owner's stock. This index makes it almost like we are using a single table only for a specific owner to use.
 - For benefiting from the index more, all queries using these fields for `WHERE` clauses should write in the same order of the index columns. The order of the columns are not random: the column with the most unique values goes to the first place. By doing this we can quickly cut out rows that are not needed in query tables.
 - **Cache** is also applied by `CacheHelper` class. The cache files are stored in `\storage\cache` folder. For now I only use the cache in the most complicated index query, cause it is apparently needed a lot and really complicated to be executed.
+- Use transactions when we need to run a group of related operations. They should either succeed or fail together, stick to the ACID principles.
+- Btw, all the queries are executed with parameter binding, so SQL injection attack can be prevented.
 
 ### Inventory level track
 Three apis `api/stock/supermarket/{id}`, `api/stock/outlet/{id}`, `api/stock/wholesaler/{id}` are provided to retrieve the inventory level of different types of stock owners. Thanks to the dynamic routing system I write, and the index mentioned above, these apis should have pretty good performance.
@@ -74,7 +88,7 @@ The reason why I choose to manage all stock data in a unified table:
 4. Consistency: A unified table helps maintain consistency in how stock data is stored and accessed. It reduces the likelihood of discrepancies between different stock tables.
 5. Scalability: It can be easier to scale and manage a single table, particularly with indexing and partitioning, compared to managing multiple tables.
 
-As for the referential integrity, we can solve the problem by setting some triggers. Everytime a stock record is about to insert to the table, or deleted from the stock table, a trigger automatically do the check to see if the owner exists and decides should the operation be allowed to continue. This is almost the same as how we use a foreign key.
+As for the referential integrity, we can solve the problem by setting some triggers. Everytime a row is going to be inserted, updated or deleted, a trigger is set to automatically do the check to see if the owner exists and decides should the operation be allowed to continue. This is almost the same as how we use a foreign key.
 
 ## Coding style
 I'm a fan of shorter functions, so I always try to write functions as short as possible. This is inspired by Martin Robert's book "Clean Code". I really benefit from it alot. Writing shorter functions makes the code easy to follow and read.
