@@ -56,7 +56,7 @@ class StockService extends Service
         return $this->model->executeSqlQuery($sql, $params);
     }
 
-    private function createQueryCreator(): QueryStringCreator
+    protected function createQueryCreator(): QueryStringCreator
     {
         $filter = new StockQueryFilter();
         $sorter = new StockQuerySorter();

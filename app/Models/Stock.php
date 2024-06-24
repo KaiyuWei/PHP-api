@@ -41,32 +41,37 @@ class Stock extends Model
         return $this->tableName;
     }
 
-    public function getAll(array $queryFields = []): array
+    public function queryProductInSuperMarket(int $supermarketId, int $productId, array $queryFields = [], array $orderBy = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
+        $sql = "SELECT $queryFields FROM stock WHERE owner_type = 'supermarket' AND owner_id = :owner_id AND product_id = :product_id";
+        $sql = QueryStringCreator::appendOrderBy($sql, $orderBy);
+        $statement = $this->db->prepare($sql);
 
-        $sql = "SELECT " . $queryFields . " FROM stock";
-        $statement = $this->db->query($sql);
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $result ?? [];
+        $statement->execute([
+            'owner_id' => $supermarketId,
+            'product_id' => $productId,
+        ]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getById(int $id, array $queryFields = [])
+    public function getTotalQuantityOfProduct(int $productId, string $ownerType, int $ownerId)
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
-
-        $sql = "SELECT " . $queryFields . " FROM stock WHERE id = :id";
+        $sql = "SELECT SUM(quantity) FROM stock WHERE owner_type = :owner_type AND product_id = :product_id AND owner_id = :owner_id";
         $statement = $this->db->prepare($sql);
-        $statement->execute(['id' => $id]);
+
+        $statement->execute([
+            'owner_type' => $ownerType,
+            'product_id' => $productId,
+            'owner_id' => $ownerId,
+        ]);
+
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
     public function create(array $data): bool
     {
-        if (!$this->validateOwner($data['owner_type'], $data['owner_id'])) {
-            throw new Exception('Invalid owner ID for the given owner type.');
-        }
-
         $sql = "INSERT INTO stock (product_id, owner_id, owner_type, quantity, entry_time) 
                 VALUES (:product_id, :owner_id, :owner_type, :quantity, :entry_time)";
         $statement = $this->db->prepare($sql);
@@ -79,12 +84,18 @@ class Stock extends Model
         ]);
     }
 
+    public function updateQuantityById(array $data): bool
+    {
+        $sql = "UPDATE stock SET quantity = :quantity WHERE id = :id";
+        $statement = $this->db->prepare($sql);
+        return $statement->execute([
+            'id' => $data['id'],
+            'quantity' => $data['quantity'],
+        ]);
+    }
+
     public function update(array $data): bool
     {
-        if (!$this->validateOwner($data['owner_type'], $data['owner_id'])) {
-            throw new Exception('Invalid owner ID for the given owner type.');
-        }
-
         $sql = "UPDATE stock SET product_id = :product_id, owner_id = :owner_id, owner_type = :owner_type, 
                 quantity = :quantity, entry_time = :entry_time WHERE id = :id";
         $statement = $this->db->prepare($sql);

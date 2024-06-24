@@ -72,6 +72,15 @@ class QueryStringCreator
         return sprintf('%s%s', $limitString, $offsetString);
     }
 
+    public static function appendOrderBy(string $sql, array $orderBy): string
+    {
+        if(empty($orderBy['column'])) return $sql;
+
+        $direction = $orderBy['direction'] ?? '';
+
+        return $sql . ' ORDER BY ' . $orderBy['column'] . ' ' . $direction;
+    }
+
     protected function combineClausesToQueryString(
         string $select,
         string $where,

@@ -4,6 +4,7 @@ namespace App\Routes;
 
 use App\Controllers\ProductController;
 use App\Controllers\StockController;
+use App\Controllers\StockControllers\SupermarketStockController;
 use App\Controllers\SupermarketController;
 use App\Controllers\UserController;
 use App\Helpers\Router;
@@ -29,6 +30,8 @@ class ApiRoutes {
         $router->get('/api/stock/supermarket/{id}', [StockController::class, 'getSupermarketStock']);
         $router->get('/api/stock/outlet/{id}', [StockController::class, 'getOutletStock']);
         $router->get('/api/stock/wholesaler/{id}', [StockController::class, 'getWholesalerStock']);
+
+        $router->post('/api/purchase/supermarket', [SupermarketStockController::class, 'purchaseFromSupermarket']);
 
         $router->dispatchRequest();
     }

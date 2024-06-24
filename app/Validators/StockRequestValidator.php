@@ -5,6 +5,8 @@ namespace App\Validators;
 use App\Models\Stock;
 use App\QueryFilters\StockQueryFilter;
 use App\QuerySorters\StockQuerySorter;
+use App\Services\ProductService;
+use App\Services\SupermarketService;
 use Exception;
 
 class StockRequestValidator extends Validator
@@ -29,6 +31,33 @@ class StockRequestValidator extends Validator
 
 
         return $queryParams;
+    }
+
+    public function validateForPurchaseInSupermarketRequest(array $data)
+    {
+        $isRequiredDataMissing = empty($data['supermarketId']) || empty($data['productId']) || empty($data['quantity']);
+        if($isRequiredDataMissing) {
+            throw new \Exception('supermarket id, product id, and purchase amount are required', 400);
+        }
+
+        if (!$this->areSupermarketAndProductExisting($data)) {
+            throw new \Exception('supermarket or product not found', 404);
+        }
+
+        if ($data['quantity'] <= 0) {
+            throw new \Exception('purchase amount should be a positive number', 400);
+        }
+    }
+
+    private function areSupermarketAndProductExisting(array $data): bool
+    {
+        $isSupermarketExisting = (new SupermarketService())->isSupermarketExisting($data['supermarketId']);
+        if(!$isSupermarketExisting) return false;
+
+        $isProductExisting = (new ProductService())->isProductExisting($data['productId']);
+        if(!$isProductExisting) return false;
+
+        return true;
     }
 
     private function validateAllowedQueryFields(array $requestedFields): void
