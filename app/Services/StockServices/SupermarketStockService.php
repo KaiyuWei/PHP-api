@@ -39,23 +39,22 @@ class SupermarketStockService extends StockService
 
     private function consumeAvailableStock(int $requiredQuantity, array $stocks)
     {
-//        echo "stocks " .json_encode($stocks) . PHP_EOL;
-
         $index = 0;
-        while ($requiredQuantity && isset($stocks[$index])) {
+        while ($requiredQuantity > 0 && isset($stocks[$index])) {
+
             $stockId = $stocks[$index]['id'];
             $availableQuantity = $stocks[$index]['quantity'];
             $requiredQuantity = $requiredQuantity - $availableQuantity;
 
             if ($requiredQuantity >= 0) {
+                // this stock has been run out, delete and move to the next
                 $this->model->delete($stockId);
+                $index++;
             }
             else {
                 $remainingQuantity = -$requiredQuantity;
                 $this->updateStockByRemainingQuantity($stockId, $remainingQuantity);
             }
-
-            $index++;
         }
     }
 
