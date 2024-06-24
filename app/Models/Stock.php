@@ -44,7 +44,7 @@ class Stock extends Model
     public function queryProductInSuperMarket(int $supermarketId, int $productId, array $queryFields = [], array $orderBy = [])
     {
         $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
-        $sql = "SELECT $queryFields FROM stock WHERE owner_type = 'supermarket' AND owner_id = :owner_id AND product_id = :product_id";
+        $sql = "SELECT $queryFields FROM stock WHERE product_id = :product_id AND owner_id = :owner_id AND owner_type = 'supermarket'";
         $sql = QueryStringCreator::appendOrderBy($sql, $orderBy);
         $statement = $this->db->prepare($sql);
 
@@ -58,7 +58,7 @@ class Stock extends Model
 
     public function getTotalQuantityOfProduct(int $productId, string $ownerType, int $ownerId): int|null
     {
-        $sql = "SELECT SUM(quantity) FROM stock WHERE owner_type = :owner_type AND product_id = :product_id AND owner_id = :owner_id";
+        $sql = "SELECT SUM(quantity) FROM stock WHERE product_id = :product_id AND owner_id = :owner_id AND owner_type = :owner_type";
         $statement = $this->db->prepare($sql);
 
         $statement->execute([
