@@ -31,7 +31,7 @@ class Supermarket extends Model
 
     public function getAll(array $queryFields = []): array
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets";
         $statement = $this->db->query($sql);
@@ -41,7 +41,7 @@ class Supermarket extends Model
 
     public function getById(int $id, array $queryFields = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets WHERE id = :id";
         $statement = $this->db->prepare($sql);
@@ -51,7 +51,7 @@ class Supermarket extends Model
 
     public function getByName(string $name, array $queryFields = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM supermarkets WHERE name = :name";
         $statement = $this->db->prepare($sql);

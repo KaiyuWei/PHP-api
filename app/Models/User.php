@@ -35,7 +35,7 @@ class User extends Model
 
     public function getById(int $id, array $queryFields = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM users WHERE id = :id";
         $stmt = $this->db->prepare($sql);
@@ -45,7 +45,7 @@ class User extends Model
 
     public function getByEmail(string $email, array $queryFields = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM users WHERE email = :email";
         $stmt = $this->db->prepare($sql);
@@ -55,7 +55,7 @@ class User extends Model
 
     public function getByToken(string $token, array $queryFields = [])
     {
-        $queryFields = QueryStringCreator::convertQueryFieldsToStringWithFieldsLimit($queryFields, $this->queriableFields);;
+        $queryFields = QueryStringCreator::convertQueryFieldsToString($queryFields);
 
         $sql = "SELECT " . $queryFields . " FROM users WHERE token = :token";
         $stmt = $this->db->prepare($sql);

@@ -50,7 +50,7 @@ class ProductApiTest extends TestCase
 
     function prepareData()
     {
-        $pdo = (new Database())->getConnection();;
+        $pdo = (new Database())->getConnection();
 
         $pdo->exec(
             "CREATE TABLE IF NOT EXISTS products (
@@ -60,7 +60,9 @@ class ProductApiTest extends TestCase
 
         $this->prepareUserInDBAndGenerateToken('trainee');
 
+        $pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
         $pdo->exec("TRUNCATE TABLE products");
+        $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
 
         $stmt = $pdo->prepare("INSERT INTO products (name) VALUES (:name)");
         $stmt->execute(['name' => 'Product 1']);
