@@ -15,9 +15,21 @@ All database only includes necessary columns for this test. In practice each tab
 ### Routing
 The routing function is mainly achieved by `ApiRouter` and some routing parsers. With them, not only static routings, but also dynamic routings such as `\api\supermarket\{id}` can be used, which enhances the flexibility of the routing system.
 
-### Request and Data Processing
+### Requests and Data Processing
 The app has some most basic classes for serving requests: 
 - `Controller` gets the data from the request, do authentication and some data validations, which ensures the validity of the request and the security of the app. Then it transfer the request data to `Service`. Later it gets processing result from `Service` and respond data or status, based on the processing result, to clients.
 - `Service` gets data from `Controllers` and implements some business logic, and interacts with databases via `Model`. It also do some validation that needs to interact with DB, e.g. validating that a email for registering a new user is not registered before.
 - `Model` interacts with DB directly, executing sql queries. Thanks to `Service`, it does not have to hold some long, unclean, and DB-irrelevant code in its classes.
 
+#### Validator
+`Validator` is used for checking the validity of data sent by request. With them, invalid data, dangerous data, not-allowed data... will be rejected with corresponding error messages and status code.
+
+#### Filtering, Sorting and Pagination
+`QueryFilter` and `QuerySorter` handle filtering and sorting respectively. As for pagination, it involves some calculation of the query offset, together with `LIMIT` in sql queries. You can find the the interesting logic in methods of `StockService` class. 
+
+### Authentication and Authorization
+- When a user logs in, a token is generated, stored in the `token` column of `users` table, and send to the client in response. This token can is used for authentication. Exception for "Register" and "Login" apis, All the other CRUD options need user authentication.
+- `role` column in `users` table is for authorization. Currently there are two roles for users: `admin` and `editor`.
+
+### Api Setup
+- 
