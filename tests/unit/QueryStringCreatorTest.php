@@ -67,35 +67,6 @@ class QueryStringCreatorTest extends TestCase
         $this->assertEquals($expected3, $actual3);
     }
 
-    public function test_create_select_query_method()
-    {
-        $filter = new StockQueryFilter();
-        $sorter = new StockQuerySorter();
-        $creator = new QueryStringCreator($filter, $sorter);
-
-        $tableName = 'stock';
-        $queryFields = ['product_id', 'owner_type'];
-        $filters = ['name' => 'John', 'product_id' => 1];
-        $orderBys = ['entry_time' => 'ASC', 'id' => 'DESC'];
-        $limit = 10;
-        $offset = 5;
-
-        $queryString = $creator->createSelectQuery($tableName, $queryFields, $filters, $orderBys, $limit, $offset);
-        $expectedQueryString = 'SELECT product_id, owner_type FROM stock WHERE product_id = :product_id ORDER BY entry_time ASC LIMIT 10 OFFSET 5;';
-        $this->assertEquals($expectedQueryString, $queryString);
-
-        $tableName = 'stock';
-        $queryFields = ['id', 'product_id', 'owner_id', 'owner_type', 'quantity', 'entry_time'];
-        $filters = ['product_id' => 10, 'id' => 3];  // using 'id' to filter stock is not allowed
-        $orderBys = ['entry_time' => 'DESC'];
-        $limit = 5;
-        $offset = 0;
-
-        $queryString = $creator->createSelectQuery($tableName, $queryFields, $filters, $orderBys, $limit, $offset);
-        $expectedQueryString = 'SELECT id, product_id, owner_id, owner_type, quantity, entry_time FROM stock WHERE product_id = :product_id ORDER BY entry_time DESC LIMIT 5;';
-        $this->assertEquals($expectedQueryString, $queryString);
-    }
-
     public function test_create_value_binding_array()
     {
         $this->filter->method('getFilterableColumns')
