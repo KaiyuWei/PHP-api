@@ -72,7 +72,26 @@ class StockIndexApiTest extends TestCase
 
     public function test_pagination()
     {
+        // CASE 1: both page and number of records are provided
+        $url = $this->baseUrl . '?fields[]=id&orderBy[id]=ASC&page=8&recordPerPage=5';
+        $response = $this->makeHttpRequest('GET', $url, null, true);
 
+        $this->assertEquals(5, count($response['body']['data']));
+        $this->assertEquals(36, $response['body']['data'][0]['id']);
+
+        // CASE 2: page provided, number of page not
+        $url = $this->baseUrl . '?fields[]=id&orderBy[id]=ASC&page=3';
+        $response = $this->makeHttpRequest('GET', $url, null, true);
+
+        $this->assertEquals(10, count($response['body']['data'])); // 10 records by default
+        $this->assertEquals(21, $response['body']['data'][0]['id']);
+
+        // CASE 2: number of page provided, page not
+        $url = $this->baseUrl . '?fields[]=id&orderBy[id]=ASC&recordPerPage=4';
+        $response = $this->makeHttpRequest('GET', $url, null, true);
+
+        $this->assertEquals(4, count($response['body']['data']));
+        $this->assertEquals(1, $response['body']['data'][0]['id']); // first page by defaul
     }
 
     private function makeHttpRequest($method, $url, $data = null, $authenticated = true)
@@ -82,12 +101,7 @@ class StockIndexApiTest extends TestCase
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-        if ($method === 'POST') {
-            curl_setopt($ch, CURLOPT_POST, 1);
-            if ($data) {
-                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-            }
-        } elseif ($method === 'GET' && $data) {
+        if ($method === 'GET' && $data) {
             curl_setopt($ch, CURLOPT_URL, $url . '?' . http_build_query($data));
         }
 
