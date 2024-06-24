@@ -54,7 +54,24 @@ The app has some most basic classes for serving requests:
 ### Inventory level track
 Three apis `api/stock/supermarket/{id}`, `api/stock/outlet/{id}`, `api/stock/wholesaler/{id}` are provided to retrieve the inventory level of different types of stock owners. Thanks to the dynamic routing system I write, and the index mentioned above, these apis should have pretty good performance.
 
-## Order processing
+### Order processing
 An api `/api/purchase/supermarket` is provided for placing order in a supermarket. The order processing followings the discipline: we always want to send out the products with the earliest entry-stock time (in other words, the "oldest" stock). Thus everytime an order is received, we query for available stocks, sort them by ascending `entry_time`, and then start calculate and consuming them. There are some complex but interesting logic in `SupermarketStockService` class for process the data. 
 
 In practice, if a supermarket's stock is, or almost run out, it should place orders to its wholesalers. This involves more complicated inventory strategies that is beyond technical topics. Besides, I did not write more code for placing orders to wholesalers when a supermarket's stock is ran out, since this is also another competitive work as the one we currently have. 
+
+## Discussion About System Designing
+
+### Database Design
+
+## Another design patter
+
+Supermarkets, outlets, and wholesalers, each of them has their own stock table. In such a way, the stock tables can have foreign key `owner_id` referring to their owner tables. This ensures the referential integrity. On the opposite, by using a unified table you cannot directly set foreign key constraint to owner tables, because the `owner_id` column includes ids from different owner tables.
+
+The reason why I choose to manage all stock data in a unified table:
+1. Simplified Schema: With a single table to manage stock, the database schema becomes simpler. We don’t need separate tables for supermarket stock and wholesaler stock, reducing complexity.
+2. Easier Maintenance: With a unified table, we only need to maintain and update one table instead of multiple tables. This reduces the amount of code you need to write and maintain.
+3. Streamlined Queries: Queries related to stock management become simpler and more efficient because we don't have to join or union multiple tables to get a complete view of stock.
+4. Consistency: A unified table helps maintain consistency in how stock data is stored and accessed. It reduces the likelihood of discrepancies between different stock tables.
+5. Scalability: It can be easier to scale and manage a single table, particularly with indexing and partitioning, compared to managing multiple tables.
+
+As for the referential integrity, we can solve the problem by setting some triggers. Everytime a stock record is about to insert to the table, or deleted from the stock table, a trigger automatically do the check to see if the owner exists and decides should the operation be allowed to continue. This is almost the same as how we use a foreign key.
