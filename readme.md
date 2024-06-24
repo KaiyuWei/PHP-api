@@ -2,8 +2,9 @@
 ### Using Docker-compose
 - **Step 1.** Boost the server: `docker-compose up -d`.
 - **Step 2.** Add and admin user and get auth info: `docker-compose exec app composer add:admin`.
-- **Step 3.** Enter the server's shell if you want: `docker-compose exec app /bin/bash`.
-- **Step 4.** Swagger UI and documentation available in http://localhost:8000/public/swagger-ui/ after the server is set up. Use the token you just obtained from **Step 2** to get authenticated as an admin.
+- **Step 3.** Enter the server's shell if you need: `docker-compose exec app /bin/bash`.
+- **Step 4.** Run all the test cases: `docker-compose exec app composer test`.
+- **Step 5.** Swagger UI and documentation available in http://localhost:8000/public/swagger-ui/ after the server is set up. Use the token you just obtained from **Step 2** to get authenticated as an admin. You can interact with all available APIs there.
 
 ### Manually
 - Add your database config in the required variables in `.env.example` and add the environment variables into your `.env` file.
