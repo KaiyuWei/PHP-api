@@ -75,3 +75,8 @@ The reason why I choose to manage all stock data in a unified table:
 5. Scalability: It can be easier to scale and manage a single table, particularly with indexing and partitioning, compared to managing multiple tables.
 
 As for the referential integrity, we can solve the problem by setting some triggers. Everytime a stock record is about to insert to the table, or deleted from the stock table, a trigger automatically do the check to see if the owner exists and decides should the operation be allowed to continue. This is almost the same as how we use a foreign key.
+
+## Coding style
+I'm a fan of shorter functions, so I always try to write functions as short as possible. This is inspired by Martin Robert's book "Clean Code". I really benefit from it alot. Writing shorter functions makes the code easy to follow and read.
+I also try to isolate the functions of classes, just like what I did with the functions of `Controller`, `Service` and `Model`. This makes the code structure clean and easy to maintain.
+Besides, I try to use more descriptive names, though sometimes they can get long. For me clearance is better than ambiguity.
