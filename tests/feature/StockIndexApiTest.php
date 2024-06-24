@@ -40,13 +40,21 @@ class StockIndexApiTest extends TestCase
         $this->assertEquals(false, $response['body']['success']);
     }
 
-    public function test_authentication_fai()
+    public function test_order_by()
     {
-        $url = $this->baseUrl;
-        $response = $this->makeHttpRequest('GET', $url, null, false);
+        // TEST CASE 2: order by owner_id ASC
+        $url = $this->baseUrl . '?fields[]=id&fields[]=owner_id&orderBy[owner_id]=ASC'; // order by owner_id ASC
+        $response = $this->makeHttpRequest('GET', $url, null, true);
 
-        $this->assertEquals(401, $response['status']);
-        $this->assertEquals(false, $response['body']['success']);
+        $this->assertEquals(200, $response['status']);
+        $this->assertEquals(1, $response['body']['data'][0]['owner_id']); // the first owner_id must be 1
+
+        // TEST CASE 2: order by owner_id DESC
+        $url = $this->baseUrl . '?fields[]=id&fields[]=owner_id&orderBy[owner_id]=DESC'; // order by owner_id ASC
+        $response = $this->makeHttpRequest('GET', $url, null, true);
+
+        $this->assertEquals(200, $response['status']);
+        $this->assertEquals(10, $response['body']['data'][0]['owner_id']); // the last owner_id must be 10
     }
 
     private function makeHttpRequest($method, $url, $data = null, $authenticated = true)
