@@ -3,4 +3,4 @@
 todo-list
 /storage/logs
 /.phpunit.cache/
-/storage/cache
+/storage/cache/
