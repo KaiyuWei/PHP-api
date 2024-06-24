@@ -121,7 +121,6 @@ class ProductController extends Controller
      *         description="The ID of a product",
      *      ),
      *     @OA\Response(response="204", description="Product is deleted"),
-     *     @OA\Response(response="400", description="Input data is invalid"),
      *     @OA\Response(response="401", description="Authentication failure"),
      *     @OA\Response(response="404", description="Product not found"),
      * )

@@ -165,9 +165,6 @@
                     "204": {
                         "description": "Product is deleted"
                     },
-                    "400": {
-                        "description": "Input data is invalid"
-                    },
                     "401": {
                         "description": "Authentication failure"
                     },
