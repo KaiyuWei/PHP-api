@@ -49,6 +49,11 @@ class UserService extends Service {
         return $user ? $user['role'] : false;
     }
 
+    public function createUser(array $data): string
+    {
+        return $this->model->create($data);
+    }
+
     private function checkUserExistence($user):void
     {
         if (!$user) {
