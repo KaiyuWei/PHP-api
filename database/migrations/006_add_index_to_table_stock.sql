@@ -8,10 +8,10 @@ BEGIN
     FROM information_schema.STATISTICS
     WHERE table_schema = DATABASE()
       AND table_name = 'stock'
-      AND index_name = 'idx_owner_type_owner_id';
+      AND index_name = 'idx_product_id_owner_type_owner_id';
 
     IF index_owner_type_owner_id_exists = 0 THEN
-        CREATE INDEX idx_owner_type_owner_id ON stock (owner_type, owner_id);
+        CREATE INDEX idx_product_id_owner_type_owner_id ON stock (product_id, owner_id, owner_type);
     END IF;
 END //
 
