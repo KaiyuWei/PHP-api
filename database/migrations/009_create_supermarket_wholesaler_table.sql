@@ -1,4 +1,4 @@
-CREATE TABLE supermarket_wholesaler (
+CREATE TABLE IF NOT EXISTS supermarket_wholesaler (
     `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `supermarket_id` BIGINT UNSIGNED NOT NULL,
     `wholesaler_id` BIGINT UNSIGNED NOT NULL,
