@@ -1,10 +1,10 @@
 ## Api Setup
 ### Using Docker-compose
-- **Step 1.** Boost the server: `docker-compose up -d`.
-- **Step 2.** Add an admin user and get auth info: `docker-compose exec app composer add:admin`.
-- **Step 3.** Enter the server's shell if you need: `docker-compose exec app /bin/bash`.
-- **Step 4.** Run all the test cases: `docker-compose exec app composer test`.
-- **Step 5.** Swagger UI and documentation available in http://localhost:8000/public/swagger-ui/ after the server is set up. Use the token you just obtained from **Step 2** to get authenticated as an admin. You can interact with all available APIs there. Before you start your playing with the APIs, you can run `docker-compose exec app composer seed:all` to easily seed dummy data into all the tables.
+- Boost the server: `docker-compose up -d`.
+- Run all the test cases: `docker-compose exec app composer test`. The tests prepare data by themselves, so you do not have to worry about that.
+- If you need, you can enter the server's shell by running: `docker-compose exec app /bin/bash`.
+- Before you start your playing with the APIs, you can run `docker-compose exec app composer seed:all` to easily seed dummy data into all the tables. Remember that every time you run this seeder, all tables are truncated first to preventing value conflicts. For being authenticated, you need to add an admin user by running: `docker-compose exec app composer add:admin`, they you get the authentication token printed on you termina.
+- Swagger UI and documentation available in http://localhost:8000/public/swagger-ui/ after the server is set up. Use the token you just obtained to get authenticated as an admin. You can interact with all available APIs there.  
 
 ### Manually
 - Add your database config in the required variables in `.env.example` and add the environment variables into your `.env` file.
