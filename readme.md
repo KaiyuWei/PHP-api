@@ -56,7 +56,7 @@ Validation handles these cases:
 6. Sensitive Data Exposure: Only allowed fields can be queried, filtered.
 
 #### Filtering, Sorting and Pagination
-`QueryFilter` and `QuerySorter` handle filtering and sorting respectively. As for pagination, it involves some calculation of the query offset, together with `LIMIT` in sql queries. You can find the the interesting logic in methods of `StockService` class. 
+`QueryFilter` and `QuerySorter` handle filtering and sorting respectively. As for pagination, it involves some calculation of the query offset, together with `LIMIT` in sql queries. You can find the interesting logic in methods of `StockService` class. For time limitation I only applied filtering, sorting and pagination to `\api\stock\index`. 
 
 ### Authentication and Authorization
 - When a user logs in, a token is generated, stored in the `token` column of `users` table, and send to the client in response. This token can is used for authentication. Exception for "Register" and "Login" apis, All the other CRUD options need user authentication.
