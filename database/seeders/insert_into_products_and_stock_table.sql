@@ -1,5 +1,8 @@
+START TRANSACTION;
+
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE products;
+TRUNCATE TABLE stock;
 SET FOREIGN_KEY_CHECKS = 1;
 
 INSERT INTO products (name) VALUES
@@ -19,7 +22,6 @@ INSERT INTO products (name) VALUES
     ('Toshiba Dynabook Tecra A50-F'),
     ('LG Gram 14Z90P Laptop');
 
-TRUNCATE TABLE stock;
 INSERT INTO stock (product_id, owner_id, owner_type, quantity, entry_time) VALUES
     (1, 1, 'supermarket', 100, '2024-06-23 10:00:00'),
     (2, 2, 'wholesaler', 150, '2024-06-23 11:00:00'),
@@ -68,3 +70,5 @@ INSERT INTO stock (product_id, owner_id, owner_type, quantity, entry_time) VALUE
     (15, 5, 'outlet', 540, '2024-06-25 06:00:00'),
     (1, 6, 'supermarket', 550, '2024-06-25 07:00:00'),
     (2, 7, 'wholesaler', 560, '2024-06-25 08:00:00');
+
+COMMIT;

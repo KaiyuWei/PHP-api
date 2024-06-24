@@ -21,7 +21,8 @@ class StockService extends Service
         int $page = 0,
         int $recordPerPage = 10)
     {
-        if ($page) {
+        if ($recordPerPage) {
+            $page = $page ? $page : 1;
             $offset = ($page - 1) * $recordPerPage;
         }
         else {
