@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Database;
+use App\Helpers\CacheHelper;
 use App\QueryFilters\QueryFilter;
 use App\QuerySorters\QuerySorter;
 use PDO;
@@ -49,5 +50,15 @@ abstract class Model
 
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    protected function useCache($key)
+    {
+        return (new CacheHelper())->getCache($key);
+    }
+
+    public function generateCacheKeyByQueryAndParams(string $sql, array $params)
+    {
+        return $sql . implode('_', $params);
     }
 }

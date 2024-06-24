@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\CacheHelper;
 use App\Helpers\DynamicRouteParser;
 use App\Helpers\QueryStringCreator;
 use App\Models\Stock;
@@ -46,7 +47,15 @@ class StockService extends Service
         $sql = $this->createSqlQuery($queryFields, $filters, $orderBys, $limit, $offset);
         $params = $this->createValueBindingArray($filters);
 
-        return $this->model->executeSqlQuery($sql, $params);
+        $cacheHelper = (new CacheHelper());
+        $cacheKey = $this->model->generateCacheKeyByQueryAndParams($sql, $params);
+        $cache = $cacheHelper->getCache($cacheKey);
+        if ($cache) return $cache;
+
+        $queryResult = $this->model->executeSqlQuery($sql, $params);
+
+        $cacheHelper->setCache($cacheKey, $queryResult);
+        return $queryResult;
     }
 
     protected function createQueryCreator(): QueryStringCreator
