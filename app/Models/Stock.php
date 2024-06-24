@@ -56,7 +56,7 @@ class Stock extends Model
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getTotalQuantityOfProduct(int $productId, string $ownerType, int $ownerId)
+    public function getTotalQuantityOfProduct(int $productId, string $ownerType, int $ownerId): int|null
     {
         $sql = "SELECT SUM(quantity) FROM stock WHERE owner_type = :owner_type AND product_id = :product_id AND owner_id = :owner_id";
         $statement = $this->db->prepare($sql);
@@ -67,7 +67,9 @@ class Stock extends Model
             'owner_id' => $ownerId,
         ]);
 
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        $result = ($statement->fetch(PDO::FETCH_ASSOC));
+
+        return $result['SUM(quantity)'];
     }
 
     public function create(array $data): bool

@@ -67,10 +67,7 @@ class SupermarketStockService extends StockService
     private function getStockInSuperMarketByEntryTimeAsc(int $supermarketId, int $productId)
     {
         $queryFields = ['id', 'quantity'];
-        $orderBy = [
-            'column' => 'entry_time',
-            'direction' => 'ASC', // we want the products with the earliest entry to be out first
-        ];
+        $orderBy = ['column' => 'entry_time', 'direction' => 'ASC']; // we want the products with the earliest entry to be out first
 
         return $this->model->queryProductInSuperMarket($supermarketId, $productId, $queryFields, $orderBy);
     }

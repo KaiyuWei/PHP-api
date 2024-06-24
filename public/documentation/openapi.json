@@ -334,61 +334,6 @@
                 ]
             }
         },
-        "/api/purchase/supermarket": {
-            "post": {
-                "tags": [
-                    "Order Process"
-                ],
-                "summary": "Purchase something from a supermarket",
-                "operationId": "241468ba2428cd170778f6c5e749a065",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "supermarketId": {
-                                        "type": "integer",
-                                        "example": 10
-                                    },
-                                    "productId": {
-                                        "type": "integer",
-                                        "example": 2
-                                    },
-                                    "quantity": {
-                                        "type": "integer",
-                                        "example": 50
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Purchase completed"
-                    },
-                    "400": {
-                        "description": "Input data is invalid"
-                    },
-                    "401": {
-                        "description": "Authentication failure"
-                    },
-                    "404": {
-                        "description": "Supermarket or product not found"
-                    },
-                    "405": {
-                        "description": "Stock not enough"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/stock/supermarket/{id}": {
             "get": {
                 "tags": [
@@ -587,6 +532,61 @@
                     },
                     "401": {
                         "description": "Authentication failure"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/purchase/supermarket": {
+            "post": {
+                "tags": [
+                    "Order Process"
+                ],
+                "summary": "Purchase something from a supermarket",
+                "operationId": "a5c17871f92597e9a5b79d0f7c6f12dd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "supermarketId": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "productId": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": 50
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Purchase completed"
+                    },
+                    "400": {
+                        "description": "Input data is invalid"
+                    },
+                    "401": {
+                        "description": "Authentication failure"
+                    },
+                    "404": {
+                        "description": "Supermarket or product not found"
+                    },
+                    "405": {
+                        "description": "Stock not enough"
                     }
                 },
                 "security": [
