@@ -25,8 +25,6 @@ RUN chown -R www-data:www-data /var/www
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN composer run:migrations
-
 EXPOSE 8000
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
