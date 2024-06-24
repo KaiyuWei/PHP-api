@@ -27,6 +27,7 @@
     "start:dev": "php -S localhost:8000",
     "gen:doc": "php generate_docs.php",
     "run:migrations": "php database/run_migrations.php",
-    "add:admin": "php scripts/add_admin_user_to_users_table.php"
+    "add:admin": "php scripts/add_admin_user_to_users_table.php",
+    "seed:all": "php database/insert_into_all_tables.php"
   }
 }
