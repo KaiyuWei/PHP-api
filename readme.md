@@ -85,7 +85,7 @@ In practice, if a supermarket's stock is, or almost run out, it should place ord
 
 ### Database Design
 
-## Another design patter
+#### Another design patter
 
 Supermarkets, outlets, and wholesalers, each of them has their own stock table. In such a way, the stock tables can have foreign key `owner_id` referring to their owner tables. This ensures the referential integrity. On the opposite, by using a unified table you cannot directly set foreign key constraint to owner tables, because the `owner_id` column includes ids from different owner tables.
 
