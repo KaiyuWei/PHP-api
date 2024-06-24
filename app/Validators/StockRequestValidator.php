@@ -16,7 +16,7 @@ class StockRequestValidator extends Validator
      */
     const DEFAULT_PAGE_NUMBER = 0;
 
-    const DEFAULT_RECORD_PER_PAGE = 10;
+    const DEFAULT_RECORD_PER_PAGE = 0;
 
     public function getValidatedQueryParamsForIndexRequest(): array
     {
@@ -80,6 +80,11 @@ class StockRequestValidator extends Validator
                 throw new Exception("$filter is not allowed to be used for filtering", 400);
             }
         }
+    }
+
+    private function validateRelationshipOfPageNumberAndRecordPerPage()
+    {
+        // if record
     }
 
     private function validateAllowedSorterFields(array $orderFields): void

@@ -57,6 +57,24 @@ class StockIndexApiTest extends TestCase
         $this->assertEquals(10, $response['body']['data'][0]['owner_id']); // the last owner_id must be 10
     }
 
+    public function test_filter()
+    {
+        $url = $this->baseUrl . '?fields[]=owner_type&fields[]=product_id&filters[owner_type]=outlet&filters[product_id]=12';
+        $response = $this->makeHttpRequest('GET', $url, null, true);
+
+        $this->assertEquals(200, $response['status']);
+
+        foreach($response['body']['data'] as $row) {
+            $this->assertEquals('outlet', $row['owner_type']);
+            $this->assertEquals(12, $row['product_id']);
+        }
+    }
+
+    public function test_pagination()
+    {
+
+    }
+
     private function makeHttpRequest($method, $url, $data = null, $authenticated = true)
     {
         $ch = curl_init();
@@ -93,7 +111,7 @@ class StockIndexApiTest extends TestCase
 
     protected function runSeeder()
     {
-        $sqlFilePath = __DIR__ . '/../../database/seeders/insert_into_products_and_stock_table.sql';
+        $sqlFilePath = __DIR__ . '/../../database/seeders/for_stock_index_api_test.sql';
         $sql = file_get_contents($sqlFilePath);
 
         $statements = explode(';', $sql);

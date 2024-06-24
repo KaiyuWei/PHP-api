@@ -21,16 +21,30 @@ class StockService extends Service
         int $page = 0,
         int $recordPerPage = 10)
     {
+        list('recordPerPage' => $recordPerPage, 'offset' => $offset) = $this->getPaginationData($page, $recordPerPage);
+        return $this->getAllWithOptions($queryFields, $filters, $orderBys, $recordPerPage, $offset);
+    }
+
+    private function getPaginationData(int $page, int $recordPerPage): array
+    {
         if ($recordPerPage) {
+            // $recordPerPage provided, $page not: first page by default
             $page = $page ? $page : 1;
             $offset = ($page - 1) * $recordPerPage;
         }
         else {
-            $recordPerPage = 0;
-            $offset = 0;
+            if($page) {
+                // $page provided, $recordPerPage not: 10 records by default
+                $recordPerPage = 10;
+                $offset = ($page - 1) * $recordPerPage;;
+            }
+            else{
+                $recordPerPage = 0;
+                $offset = 0;
+            }
         }
 
-        return $this->getAllWithOptions($queryFields, $filters, $orderBys, $recordPerPage, $offset);
+        return ['recordPerPage' => $recordPerPage, 'offset' => $offset];
     }
 
     public function getStock(string $ownerType)
